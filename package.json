@@ -3,39 +3,18 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "workspaces": [
+    "apps/web",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "web": "cd apps/web && bun run start"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.30",
-    "tailwindcss": "^3.3.3",
-    "typescript": "^5.0.2",
-    "vite": "^4.4.5",
-    "vite-plugin-pwa": "^0.16.5",
-    "bun-types": "latest"
-  },
-  "dependencies": {
-    "@ethersproject/abstract-signer": "^5.7.0",
-    "@ethersproject/contracts": "^5.7.0",
-    "@ethersproject/hash": "^5.7.0",
-    "@ethersproject/providers": "^5.7.2",
-    "@ethersproject/wallet": "^5.7.0",
-    "@fun-xyz/core": "^0.4.8",
-    "@lit-protocol/auth-helpers": "^2.2.47",
-    "@lit-protocol/constants": "^2.2.47",
-    "@lit-protocol/ecdsa-sdk": "^2.2.47",
-    "@lit-protocol/lit-auth-client": "^2.2.47",
-    "@lit-protocol/lit-node-client": "^2.2.47",
-    "@lit-protocol/pkp-ethers": "^2.2.47",
-    "@lit-protocol/types": "^2.2.47",
-    "@supabase/supabase-js": "^2.36.0",
-    "@types/mithril": "^2.2.1",
-    "ethers": "^6.7.1",
-    "mithril": "^2.2.2",
-    "mithril-cc": "^0.11.2",
-    "viem": "^1.12.1"
+    "@biomejs/biome": "^1.2.2",
+    "@types/react": "~18.2.21",
+    "@types/react-native": "^0.72.2",
+    "bun-types": "latest",
+    "typescript": "^5.2.2"
   }
 }

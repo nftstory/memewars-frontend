@@ -1,29 +1,25 @@
-import { LitAuthClient, WebAuthnProvider } from "@lit-protocol/lit-auth-client";
-import { LitNodeClient } from "@lit-protocol/lit-node-client";
-import { ProviderType } from "@lit-protocol/constants";
 import {
-  AuthMethod,
-  AuthCallbackParams,
-  IRelayPollStatusResponse,
-  IRelayPKP,
-  SessionSigsMap,
-} from "@lit-protocol/types";
-import { LitAbility, LitActionResource } from "@lit-protocol/auth-helpers";
-import { PKPEthersWallet, ethRequestHandler } from "@lit-protocol/pkp-ethers";
-import { ethers } from "ethers";
-import {
-  FunWallet,
   Auth,
+  FunWallet,
   GlobalEnvOption,
   configureEnvironment,
 } from "@fun-xyz/core";
-import { goerli } from "viem/chains";
-import { encodeFunctionData, toHex, Chain } from "viem";
-import { TypedDataField } from "@ethersproject/abstract-signer";
-import { IglooNFTABI } from "./temp-abi";
+import { LitAbility, LitActionResource } from "@lit-protocol/auth-helpers";
+import { ProviderType } from "@lit-protocol/constants";
+import { LitAuthClient, WebAuthnProvider } from "@lit-protocol/lit-auth-client";
+import { LitNodeClient } from "@lit-protocol/lit-node-client";
+import { PKPEthersWallet } from "@lit-protocol/pkp-ethers";
+import {
+  AuthCallbackParams,
+  AuthMethod,
+  IRelayPKP,
+  IRelayPollStatusResponse,
+  SessionSigsMap,
+} from "@lit-protocol/types";
+import { Chain, encodeFunctionData } from "viem";
 import { NFTContractAbi } from "./onchain/MemeWarNft";
 
-export type { SessionSigsMap }
+export type { SessionSigsMap };
 
 const IGLOONFT_TOKEN_GORLI_CONTRACT_ADDRESS =
   "0x799e75059126E6DA27A164d1315b1963Fb82c44F";
@@ -40,14 +36,15 @@ export class Passkey {
   public sessionSig: SessionSigsMap | undefined;
 
   constructor() {
-    this.litAuthClient = new LitAuthClient({
-      litRelayConfig: {
-        relayApiKey: import.meta.env.VITE_LIT_RELAY_API_KEY,
-      },
-    });
-    this.litAuthClient.initProvider(ProviderType.WebAuthn);
+    this.litAuthClient = null
+    // this.litAuthClient? = new LitAuthClient({
+    //   litRelayConfig: {
+    //     relayApiKey: import.meta.env.VITE_LIT_RELAY_API_KEY,
+    //   },
+    // });
+    this.litAuthClient?.initProvider(ProviderType.WebAuthn);
 
-    this.webAuthnProvider = this.litAuthClient.getProvider(
+    this.webAuthnProvider = this.litAuthClient?.getProvider(
       ProviderType.WebAuthn
     ) as WebAuthnProvider;
 
@@ -131,7 +128,7 @@ export class Passkey {
 
     this.sessionSig = sessionSigsMap;
 
-    return {sessionSigsMap, sessionExpiresAt};
+    return { sessionSigsMap, sessionExpiresAt };
   }
 
   public async createPkpEthersWallet(

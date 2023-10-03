@@ -1,0 +1,10 @@
+{
+  "name": "@memewar/ui",
+  "type": "module",
+  "dependencies": {
+    "expo-router": "^2.0.8",
+    "nativewind": "^2.0.11",
+    "solito": "4.0.1"
+  },
+  "sideEffects": false
+}

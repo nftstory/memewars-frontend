@@ -27,6 +27,7 @@ type RankingItem = {
 type Attrs = {
   user: User;
 };
+
 export const MemeList = cc<Attrs>(function () {
   let collections: RankingItem[] = [];
 

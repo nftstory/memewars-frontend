@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    "expo": "^49.0.3",
+    "next": "~13.1.1",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "react-native": "0.70.5",
+    "react-native-web": "~0.18.7",
+    "raf": "^3.4.1",
+    "setimmediate": "^1.0.5",
+    "solito": "^4.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.19.3",
+    "@biomejs/biome": "^1.2.2",
+    "@expo/next-adapter": "~5.0.0",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.3"
+  },
+  "scripts": {
+    "start": "next dev",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "build": "next build"
+  },
+  "name": "@memewar/web",
+  "version": "1.0.0",
+  "private": true
+}
