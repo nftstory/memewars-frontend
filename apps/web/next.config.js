@@ -7,8 +7,10 @@ const nextConfig = withExpo( {
   transpilePackages: [
     "react-native",
     "expo",
+    "expo-image",
     'react-native-web',
     'solito',
+    'nativewind',
     '@memewar/ui',
     '@expo/html-elements',
     'react-native-gesture-handler'

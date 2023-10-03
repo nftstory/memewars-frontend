@@ -1,2 +1,5 @@
-export * from './view'
+export * from './image'
+export * from './pressable'
 export * from './text'
+export * from './text-input'
+export * from './view'
