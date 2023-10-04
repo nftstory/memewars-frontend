@@ -2,10 +2,13 @@
   "name": "@memewar/ui",
   "type": "module",
   "dependencies": {
+    "abitype": "^0.9.9",
     "expo-image": "^1.5.1",
     "expo-router": "^2.0.8",
     "nativewind": "^2.0.11",
-    "solito": "4.0.1"
+    "solito": "4.0.1",
+    "viem": "^1.15.1",
+    "wagmi": "^1.4.3"
   },
   "sideEffects": false
 }

@@ -2,6 +2,7 @@ import { pgTable, serial, text, integer, timestamp, primaryKey, uuid, boolean, j
 import type { AdapterAccount } from "@auth/core/adapters"
 import { relations } from "drizzle-orm"
 import type { Base64URLString } from "@forum/passkeys"
+import type { Address } from 'abitype'
 
 /**
  * - Tables
@@ -60,11 +61,22 @@ export const authenticators = pgTable("authenticators", {
     userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }),
 })
 
+export const memewar = pgTable('memewar', {
+    id: serial('id').primaryKey(),
+    address: text('address').$type<Address & { __brand: 'Address' }>(),
+    collectionName: text('collection_name'),
+    tokenId: integer('token_id'),
+    mintCount: integer('mint_count'),
+    startedAt: timestamp('started_at').defaultNow(),
+    creatorUserId: uuid('creator_user_id').references(() => users.id, { onDelete: 'cascade' })
+})
+
 
 /**
  * Relations
  */
 export const usersRelations = relations(users, ({ many, one }) => ({
+    memewars: many(memewar),
     authenticators: many(authenticators),
     sessions: many(sessions),
     accounts: one(accounts, {
@@ -90,6 +102,13 @@ export const authenticatorsRelations = relations(authenticators, ({ one }) => ({
 export const accountsRelations = relations(accounts, ({ one }) => ({
     user: one(users, {
         fields: [accounts.userId],
+        references: [users.id]
+    })
+}))
+
+export const memewarRelations = relations(memewar, ({ one }) => ({
+    user: one(users, {
+        fields: [memewar.creatorUserId],
         references: [users.id]
     })
 }))
