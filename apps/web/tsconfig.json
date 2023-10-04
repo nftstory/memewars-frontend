@@ -15,6 +15,9 @@
       "@ui/*": [
         "../../packages/ui/*"
       ],
+      "@utils/*": [
+        "../../packages/utils/*"
+      ]
     }
   },
   "include": [

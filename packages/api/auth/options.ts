@@ -2,7 +2,7 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { authenticators, db, users } from "@db/index";
 import { eq, sql } from 'drizzle-orm'
 import Credentials from "next-auth/providers/credentials";
-
+import * as jose from 'jose'
 import {
     type VerifiedAuthenticationResponse,
     verifyAuthenticationResponse,
@@ -14,8 +14,9 @@ import { type Base64URLString, webauthnAuthenticationResponseSchema, webauthnReg
 import { base64UrlStringtoBuffer, bufferToBase64UrlString } from "@utils/base64-url";
 
 /**
- * Prepared statements can be used across serverless executions and so will be much faster
- * https://orm.drizzle.team/docs/perf-serverless
+ * Prepared statements can be used across serverless executions and so will be much faster 
+ * ! beware this may cause connection pooling issues if db doesn't support see (4) in https://www.felixvemmer.com/blog/drizzle-orm-boosting-developer-productivity/
+ * - docs: https://orm.drizzle.team/docs/perf-serverless
  */
 
 const getUsersAuthenticator = db.query.authenticators.findFirst({
@@ -23,12 +24,14 @@ const getUsersAuthenticator = db.query.authenticators.findFirst({
     with: { user: { with: { accounts: true } } }
 }).prepare('getUsersAuthenticator')
 
+const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET!)
+
 
 export const authOptions = {
     debug: process.env.NODE_ENV !== "production",
     adapter: DrizzleAdapter(db),
-    session: { strategy: "jwt" },
-    secret: process.env.NEXTAUTH_SECRET,
+    session: { strategy: "jwt" } as const,
+    secret: process.env.NEXTAUTH_SECRET!,
     providers: [
         Credentials({
             id: "webauthn",
@@ -106,13 +109,19 @@ export const authOptions = {
                         // - at this point we haven't give the user an account but we have given them a challenge
                         // - so we check that the user has returned a challenge matching that on their init cookie
                         const headers = new Headers(response.headers);
-                        const cookies = headers.getSetCookie()
+                        const cookieEntries = headers.getSetCookie().map(cookie => cookie.split('='))
+                        const cookies = Object.fromEntries(cookieEntries)
+                        const challengeJwt = cookies?.challenge
 
-                        // TODO: search cookies for challenge
-                        // TODO: decrypt cookie value of challenge
-                        // TODO: create challenge function and encrypt challenge
+                        const { payload, protectedHeader } = await jose.jwtVerify(challengeJwt, secret, {
+                            issuer: process.env.NEXTAUTH_URL!,
+                        })
+
+                        console.log('protectedHeader', protectedHeader)
+                        console.log('payload', payload)
+                        // TODO: recover signed challenge
+
                         const expectedChallenge = ''
-
 
                         let verification: VerifiedRegistrationResponse | undefined;
                         try {

@@ -6,6 +6,7 @@
     "expo-image": "^1.5.1",
     "expo-router": "^2.0.8",
     "nativewind": "^2.0.11",
+    "remeda": "^1.27.0",
     "solito": "4.0.1",
     "viem": "^1.15.1",
     "wagmi": "^1.4.3"
