@@ -2,14 +2,18 @@
   "name": "@memewar/ui",
   "type": "module",
   "dependencies": {
+    "@hookform/resolvers": "^3.3.1",
     "abitype": "^0.9.9",
     "expo-image": "^1.5.1",
     "expo-router": "^2.0.8",
     "nativewind": "^2.0.11",
+    "react-hook-form": "^7.47.0",
     "remeda": "^1.27.0",
+    "rn-passkeys": "^0.1.6",
     "solito": "4.0.1",
     "viem": "^1.15.1",
-    "wagmi": "^1.4.3"
+    "wagmi": "^1.4.3",
+    "wretch": "^2.7.0"
   },
   "sideEffects": false
 }

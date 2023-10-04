@@ -13,19 +13,19 @@ import { expectedOrigin, rpID } from "../constants";
 import { type Base64URLString, webauthnAuthenticationResponseSchema, webauthnRegisterationResultSchema } from "@forum/passkeys";
 import { base64UrlStringtoBuffer, bufferToBase64UrlString } from "@utils/base64-url";
 
+console.log('db', db)
+
 /**
  * Prepared statements can be used across serverless executions and so will be much faster 
  * ! beware this may cause connection pooling issues if db doesn't support see (4) in https://www.felixvemmer.com/blog/drizzle-orm-boosting-developer-productivity/
  * - docs: https://orm.drizzle.team/docs/perf-serverless
  */
-
 const getUsersAuthenticator = db.query.authenticators.findFirst({
     where: (authenticator, { eq }) => eq(authenticator.credentialID, sql.placeholder('credentialID')),
     with: { user: { with: { accounts: true } } }
 }).prepare('getUsersAuthenticator')
 
 const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET!)
-
 
 export const authOptions = {
     debug: process.env.NODE_ENV !== "production",

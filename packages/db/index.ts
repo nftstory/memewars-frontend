@@ -13,5 +13,5 @@ export let db: ReturnType<typeof drizzle<typeof schema>>
 // - use an if instead of a throwing guard so we can still export the schema from this file
 if (connectionString) {
     client = postgres(connectionString)
-    db = drizzle<typeof schema>(client)
+    db = drizzle(client, { schema })
 }
