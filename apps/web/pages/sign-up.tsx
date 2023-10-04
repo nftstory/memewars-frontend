@@ -44,6 +44,9 @@ export default function SignUp() {
         localStorage.setItem('csrfToken', csrfToken)
         localStorage.setItem('challenge', challenge)
       })
+      .catch((e) => {
+        console.error('failed to fetch challenge', e)
+      })
   }, [])
 
   return (
