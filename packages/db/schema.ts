@@ -18,7 +18,7 @@ export const accounts = pgTable("accounts", {
     scope: text("scope"),
     id_token: text("id_token"),
     session_state: text("session_state"),
-    userId: text("user_id")
+    userId: uuid("user_id")
         .notNull()
         .references(() => users.id, { onDelete: "cascade" }),
 },
@@ -70,6 +70,22 @@ export const memewar = pgTable('memewar', {
     startedAt: timestamp('started_at').defaultNow(),
     creatorUserId: uuid('creator_user_id').references(() => users.id, { onDelete: 'cascade' })
 })
+
+/**
+ * old definition:
+ * 
+ * create table public.memewar (
+    id bigint not null,
+    address text null,
+    collection_name text null,
+    token_id bigint null,
+    uri text null,
+    started_at timestamp with time zone null,
+    mint_count bigint null,
+    creator_name text null,
+    constraint memewar_pkey primary key (id)
+  ) tablespace pg_default;
+ */
 
 
 /**

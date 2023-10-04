@@ -5,7 +5,7 @@ import * as schema from './schema'
 
 export * from './schema'
 
-const connectionString = process.env.DIRECT_URL
+const connectionString = process.env.SUPABASE_CONNECTION_STRING
 
 let client: ReturnType<typeof postgres>
 export let db: ReturnType<typeof drizzle<typeof schema>>

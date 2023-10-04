@@ -4,15 +4,15 @@ import * as dotenv from 'dotenv'
 
 dotenv.config({ path: `.env${process.env.DEV ? '.development' : ''}` })
 
-const DB_URL = process.env.DATABASE_URL
+const CONNECTION_STRING = process.env.SUPABASE_CONNECTION_STRING
 
-if (!DB_URL) {
-    throw new Error('DATABASE_URL is not set')
+if (!CONNECTION_STRING) {
+    throw new Error('SUPABASE_CONNECTION_STRING is not set')
 }
 
 export default {
-    schema: './schema/*',
+    schema: './schema.ts',
     out: './migrations',
     driver: 'pg',
-    dbCredentials: { connectionString: DB_URL },
+    dbCredentials: { connectionString: CONNECTION_STRING },
 } satisfies Config
