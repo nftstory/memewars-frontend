@@ -18,6 +18,7 @@ const nextConfig = withExpo( {
     'react-native-gesture-handler'
   ],
   experimental: {
+    appDir: true,
     forceSwcTransforms: true,
   },
 } );
