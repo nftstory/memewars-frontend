@@ -1,7 +1,7 @@
-import { pgTable, serial, text, integer, timestamp, primaryKey } from "drizzle-orm/pg-core"
+import { pgTable, serial, text, integer, timestamp, primaryKey, uuid, boolean, json } from "drizzle-orm/pg-core"
 import type { AdapterAccount } from "@auth/core/adapters"
 import { relations } from "drizzle-orm"
-import type { Base64URLString } from "@utils/zod"
+import type { Base64URLString } from "@forum/passkeys"
 
 /**
  * - Tables
@@ -29,14 +29,12 @@ export const sessions = pgTable("sessions", {
     id: serial('id').primaryKey(),
     sessionToken: text("session_token"),
     expires: timestamp('created_at').defaultNow(),
-    userId: text('user_id').references(() => users.id, { onDelete: 'cascade' }),
+    userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }),
 })
 
 export const users = pgTable("user", {
-    id: serial('id').primaryKey(),
-    name: text("name"),
-    email: text("email"),
-    emailVerified: timestamp('created_at').defaultNow(),
+    id: uuid('id').primaryKey().defaultRandom(),
+    username: text("username"),
     image: text("image"),
     currentChallenge: text("current_challenge").$type<Base64URLString>(),
 })
@@ -57,9 +55,9 @@ export const authenticators = pgTable("authenticators", {
     credentialPublicKey: text('credential_public_key').$type<Base64URLString>(),
     counter: integer("counter").notNull(),
     credentialDeviceType: text("credential_device_type"),
-    credentialBackedUp: integer("credential_backed_up"),
-    transports: text("transports"),
-    userId: text('user_id').references(() => users.id, { onDelete: 'cascade' }),
+    credentialBackedUp: boolean("credential_backed_up"),
+    transports: json("transports").$type<AuthenticatorTransport[]>().default([]),
+    userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }),
 })
 
 

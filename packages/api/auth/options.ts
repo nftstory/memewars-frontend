@@ -1,12 +1,17 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { db, users } from "@db/index";
+import { authenticators, db, users } from "@db/index";
 import { eq, sql } from 'drizzle-orm'
 import Credentials from "next-auth/providers/credentials";
 
-import { type VerifiedAuthenticationResponse, verifyAuthenticationResponse } from "@simplewebauthn/server";
+import {
+    type VerifiedAuthenticationResponse,
+    verifyAuthenticationResponse,
+    verifyRegistrationResponse,
+    VerifiedRegistrationResponse
+} from "@simplewebauthn/server";
 import { expectedOrigin, rpID } from "../constants";
-import { Base64URLString, webauthnAuthenticationResponseSchema, webauthnRegisterationResultSchema } from "@utils/zod";
-import { base64UrlStringtoBuffer } from "@utils/base64-url";
+import { type Base64URLString, webauthnAuthenticationResponseSchema, webauthnRegisterationResultSchema } from "@forum/passkeys";
+import { base64UrlStringtoBuffer, bufferToBase64UrlString } from "@utils/base64-url";
 
 /**
  * Prepared statements can be used across serverless executions and so will be much faster
@@ -19,18 +24,19 @@ const getUsersAuthenticator = db.query.authenticators.findFirst({
 }).prepare('getUsersAuthenticator')
 
 
-
-
 export const authOptions = {
     debug: process.env.NODE_ENV !== "production",
     adapter: DrizzleAdapter(db),
     session: { strategy: "jwt" },
+    secret: process.env.NEXTAUTH_SECRET,
     providers: [
         Credentials({
             id: "webauthn",
             name: "WebAuthn",
-            credentials: {},
-            async authorize(credentials) {
+            credentials: {
+                username: { label: "Username", type: "text ", placeholder: "vitalik" },
+            },
+            async authorize(credentials, response) {
                 if (!db) throw new Error('Missing db credentials')
                 if (!credentials) return null
 
@@ -38,12 +44,8 @@ export const authOptions = {
 
                 if (authCredentials.success) {
 
-                    const {
-                        id: credentialID,
-                        // TODO: track the results of largeBlob storage
-                        // clientExtensionResults
-                    } = authCredentials.data
-
+                    // TODO: track the results of largeBlob storage
+                    const { id: credentialID, clientExtensionResults: _ } = authCredentials.data
 
                     const authenticator = await getUsersAuthenticator.execute({ credentialID })
 
@@ -100,8 +102,68 @@ export const authOptions = {
                     const registrationCredentials = webauthnRegisterationResultSchema.safeParse(credentials)
 
                     if (registrationCredentials.success) {
-                        // TODO: register user
 
+                        // - at this point we haven't give the user an account but we have given them a challenge
+                        // - so we check that the user has returned a challenge matching that on their init cookie
+                        const headers = new Headers(response.headers);
+                        const cookies = headers.getSetCookie()
+
+                        // TODO: search cookies for challenge
+                        // TODO: decrypt cookie value of challenge
+                        // TODO: create challenge function and encrypt challenge
+                        const expectedChallenge = ''
+
+
+                        let verification: VerifiedRegistrationResponse | undefined;
+                        try {
+                            verification = await verifyRegistrationResponse({
+                                response: registrationCredentials.data,
+                                expectedChallenge,
+                                expectedOrigin,
+                                expectedRPID: rpID,
+                                requireUserVerification: true,
+                            });
+                        } catch (error) {
+                            console.error(error);
+                            return null
+                        }
+
+                        if (!verification?.verified)
+                            return null
+
+                        const { registrationInfo: {
+                            credentialPublicKey,
+                            credentialID,
+                            counter,
+                            credentialBackedUp,
+                            credentialDeviceType,
+                        } = {} } = verification;
+
+                        // Save the authenticator info so that we can
+                        // get it by user ID later
+                        if (!credentialID || !credentialPublicKey)
+                            return null
+
+                        const authenticator = {
+                            credentialID: bufferToBase64UrlString(credentialID),
+                            credentialPublicKey: bufferToBase64UrlString(credentialPublicKey),
+                            counter: counter ?? 0,
+                            credentialBackedUp: credentialBackedUp ?? false,
+                            credentialDeviceType: credentialDeviceType ?? "singleDevice",
+                        };
+
+                        let user: typeof users.$inferSelect | null = null
+
+                        await db.transaction(async (tx) => {
+                            await tx.insert(authenticators).values(authenticator)
+                            const userResult = await tx.insert(users).values({
+                                username: credentials.username,
+                            }).returning()
+
+                            user = userResult[0] || null
+                        })
+
+                        return user
                     }
                 }
 
