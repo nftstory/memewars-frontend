@@ -1,6 +1,7 @@
 import { pgTable, serial, text, integer, timestamp, primaryKey } from "drizzle-orm/pg-core"
 import type { AdapterAccount } from "@auth/core/adapters"
 import { relations } from "drizzle-orm"
+import type { Base64URLString } from "@utils/zod"
 
 /**
  * - Tables
@@ -37,7 +38,7 @@ export const users = pgTable("user", {
     email: text("email"),
     emailVerified: timestamp('created_at').defaultNow(),
     image: text("image"),
-    currentChallenge: text("current_challenge"),
+    currentChallenge: text("current_challenge").$type<Base64URLString>(),
 })
 
 export const verificationTokens = pgTable("verification_tokens", {
@@ -52,8 +53,8 @@ export const verificationTokens = pgTable("verification_tokens", {
 
 export const authenticators = pgTable("authenticators", {
     id: serial('id').primaryKey(),
-    credentialID: text('credential_id'),
-    credentialPublicKey: text('credential_public_key'),
+    credentialID: text('credential_id').$type<Base64URLString>(),
+    credentialPublicKey: text('credential_public_key').$type<Base64URLString>(),
     counter: integer("counter").notNull(),
     credentialDeviceType: text("credential_device_type"),
     credentialBackedUp: integer("credential_backed_up"),
