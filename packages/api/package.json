@@ -3,6 +3,7 @@
   "private": "true",
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.3",
+    "@simplewebauthn/server": "^8.2.0",
     "next-auth": "^4.23.2"
   }
 }
