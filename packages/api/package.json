@@ -1,4 +1,8 @@
 {
-    "name": "@memewar/api",
-    "private": "true"
+  "name": "@memewar/api",
+  "private": "true",
+  "dependencies": {
+    "@auth/drizzle-adapter": "^0.3.3",
+    "next-auth": "^4.23.2"
+  }
 }

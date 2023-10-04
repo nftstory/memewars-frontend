@@ -6,6 +6,12 @@
       "@styles/*": [
         "./public/styles/*"
       ],
+      "@api/*": [
+        "../../packages/api/*"
+      ],
+      "@db/*": [
+        "../../packages/db/*"
+      ],
       "@ui/*": [
         "../../packages/ui/*"
       ],

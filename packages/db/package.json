@@ -1,4 +1,11 @@
 {
-    "name": "@memewar/db",
-    "private": "true"
+  "name": "@memewar/db",
+  "private": "true",
+  "dependencies": {
+    "drizzle-orm": "^0.28.6",
+    "postgres": "^3.3.5"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.19.13"
+  }
 }
