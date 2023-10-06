@@ -1,3 +1,4 @@
 import React from 'react'
+import type { SessionProvider as NextAuthSessionProvider } from 'next-auth/react'
 
-export const  SessionProvider = ({children}:{ children:React.ReactNode }) => <React.Fragment>{children}</React.Fragment>
+export const SessionProvider = ({ children }: React.ComponentProps<typeof NextAuthSessionProvider>) => <>{children}</>

@@ -13,8 +13,8 @@
   "devDependencies": {
     "@biomejs/biome": "^1.2.2",
     "@types/react": "~18.2.21",
-    "@types/react-native": "^0.72.2",
     "bun-types": "latest",
+    "encoding": "^0.1.13",
     "typescript": "^5.2.2"
   }
 }

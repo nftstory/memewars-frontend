@@ -9,9 +9,13 @@ import { eq } from 'drizzle-orm'
 import { type NextRequest } from 'next/server'
 import * as jose from 'jose'
 
-const handler = NextAuth(authOptions);
 
-export async function POST(req: NextRequest, res: Response) {
+type Base64URLString = string & { __brand: 'Base64URLString' }
+interface RouteHandlerContext {
+  params: { nextauth: string[] }
+}
+
+export async function POST(req: NextRequest, context: RouteHandlerContext) {
   const headersStore = headers()
   const searchParams = req.nextUrl.searchParams
 
@@ -37,21 +41,23 @@ export async function POST(req: NextRequest, res: Response) {
     req.headers.set('x-challenge', challenge)
   }
 
-  return await handler(req, res)
+  return await NextAuth(req, context, authOptions)
 }
 
-export async function GET(req: NextRequest, res: Response) {
+export async function GET(req: NextRequest, context: RouteHandlerContext) {
   const cookieStore = cookies()
   const headersStore = headers()
-  const searchParams = req.nextUrl.searchParams
+  const { params } = context
 
   const hasXChallenge = !!headersStore.get('x-challenge')
 
-  if (searchParams.get('nextauth') === 'csrf' && !hasXChallenge) {
-    // - get request to this route is a potential new user
+  let challenge: Base64URLString | undefined
+  if (params?.nextauth.includes('csrf') && hasXChallenge) {
+    // - get request to this route is a potential new user 
+    // - since they are new we cannot have a `currentChallenge` so we use a secure cookie instead
 
     const rawChallenge = crypto.randomBytes(32)
-    const challenge = bufferToBase64UrlString(rawChallenge)
+    challenge = bufferToBase64UrlString(rawChallenge)
 
     const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET!)
 
@@ -63,18 +69,20 @@ export async function GET(req: NextRequest, res: Response) {
       .sign(secret)
 
     cookieStore.set({
-      name: 'challenge',
+      name: 'next-auth.challenge',
       value: challengeJwt,
-      //@ts-expect-error:
       domain: process.env.NEXTAUTH_URL!,
       httpOnly: true,
       maxAge: 60 * 60, // - 1 hour,
       secure: true
     })
-
-    req.headers.set('x-challenge', challenge)
   }
 
-  return await handler(req, res)
-}
+  const response = await NextAuth(req, context, authOptions)
 
+  if ((response as Response)) {
+    response.headers.set('x-challenge', challenge)
+  }
+
+  return response
+}

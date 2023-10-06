@@ -14,6 +14,12 @@ const csrfTokenSchema = z.object({
   csrfToken: z.string(),
 })
 
+function getCookie(name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop()?.split(';').shift()
+}
+
 export default function SignUp() {
   const methods = useForm({ resolver: zodResolver(usernameFormSchema) })
 
@@ -26,20 +32,26 @@ export default function SignUp() {
 
   // - on mount init a challenge
   useEffect(() => {
+    console.log('fetching token')
+
+    // tODO: only do this if we do not have a session / redirect if the user has a session
     wretch('/api/auth/csrf')
       .headers({ 'x-challenge': 'true' })
       .get()
       .res()
       .then(async (res) => {
-        console.log(res)
+        if (!res.ok) throw new Error('Failed to fetch token')
 
         const { csrfToken } = csrfTokenSchema.parse(await res.json())
 
-        const challenge = res.headers.get('X-Challenge')
+        console.log('headers', res.headers, res.headers.getSetCookie())
+
+        const challenge = res.headers.get('x-challenge')
 
         // ? too harsh throwing an error here?
         if (!challenge || !csrfToken) throw new Error('Something went wrong initing challenge')
 
+        console.log('challenge', { challenge, csrfToken })
         // TODO: write an abstraction for storage here
         localStorage.setItem('csrfToken', csrfToken)
         localStorage.setItem('challenge', challenge)

@@ -10,10 +10,8 @@ import {
     VerifiedRegistrationResponse
 } from "@simplewebauthn/server";
 import { expectedOrigin, rpID } from "../constants";
-import { type Base64URLString, webauthnAuthenticationResponseSchema, webauthnRegisterationResultSchema } from "@forum/passkeys";
+import { type Base64URLString, webauthnAuthenticationResponseSchema, webauthnRegisterationResultSchema } from "@forum/passkeys/src/utils/webauthn-zod";
 import { base64UrlStringtoBuffer, bufferToBase64UrlString } from "@utils/base64-url";
-
-console.log('db', db)
 
 /**
  * Prepared statements can be used across serverless executions and so will be much faster 
