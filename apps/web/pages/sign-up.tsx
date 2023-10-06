@@ -1,10 +1,16 @@
 import React, { useCallback, useEffect } from 'react'
 import { Pressable, Text, TextInput, View } from '@ui/components/design-system'
 import { z } from 'zod'
-import { useForm, Controller } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
+import { useZodForm } from '@ui/hooks/use-zod-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import wretch from 'wretch'
-import {} from 'rn-passkeys'
+// import * as passkey from 'react-native-passkeys'
+import { getHostname } from '@utils/get-hostname'
+import { getBaseUrl } from '@utils/get-base-url'
+import { Passkey } from '@utils/passkey'
+import { api } from '@utils/api'
+import { type Base64URLString } from '@forum/passkeys'
+import { asciiToBase64UrlString } from '@utils/base64-url'
 
 const usernameFormSchema = z.object({
   username: z.string().min(3).max(20),
@@ -14,44 +20,53 @@ const csrfTokenSchema = z.object({
   csrfToken: z.string(),
 })
 
-function getCookie(name) {
-  const value = `; ${document.cookie}`
-  const parts = value.split(`; ${name}=`)
-  if (parts.length === 2) return parts.pop()?.split(';').shift()
-}
+const passkey = new Passkey()
 
 export default function SignUp() {
-  const methods = useForm({ resolver: zodResolver(usernameFormSchema) })
+  const methods = useZodForm({ schema: usernameFormSchema })
 
-  const onSubmit = useCallback(async () => {
-    const challenge = localStorage.getItem('challenge')
+  const onSubmit = useCallback<Parameters<typeof methods['handleSubmit']>[0]>(async ({ username }) => {
+    console.log('username', username)
+    const challenge = localStorage.getItem('challenge') as Base64URLString | undefined
     const csrfToken = localStorage.getItem('csrfToken')
 
     if (!challenge || !csrfToken) throw new Error('Could not find challenge or token')
+
+    console.log('hostname', getHostname())
+    console.log('baseUrl', getBaseUrl())
+
+    console.log(
+      'result',
+      await passkey.create({
+        challenge,
+        csrfToken,
+        user: {
+          id: asciiToBase64UrlString(username),
+          name: username,
+          displayName: username,
+        },
+        extensions: { largeBlob: { support: 'required' } },
+      }),
+    )
   }, [])
 
   // - on mount init a challenge
   useEffect(() => {
-    console.log('fetching token')
-
     // tODO: only do this if we do not have a session / redirect if the user has a session
-    wretch('/api/auth/csrf')
+    api
       .headers({ 'x-challenge': 'true' })
-      .get()
+      .get('/auth/csrf')
       .res()
       .then(async (res) => {
         if (!res.ok) throw new Error('Failed to fetch token')
 
         const { csrfToken } = csrfTokenSchema.parse(await res.json())
 
-        console.log('headers', res.headers, res.headers.getSetCookie())
-
         const challenge = res.headers.get('x-challenge')
 
         // ? too harsh throwing an error here?
         if (!challenge || !csrfToken) throw new Error('Something went wrong initing challenge')
 
-        console.log('challenge', { challenge, csrfToken })
         // TODO: write an abstraction for storage here
         localStorage.setItem('csrfToken', csrfToken)
         localStorage.setItem('challenge', challenge)

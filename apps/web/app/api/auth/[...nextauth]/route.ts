@@ -16,19 +16,21 @@ interface RouteHandlerContext {
 }
 
 export async function POST(req: NextRequest, context: RouteHandlerContext) {
+  const { params } = context
   const headersStore = headers()
-  const searchParams = req.nextUrl.searchParams
 
   const hasXChallenge = !!headersStore.get('x-challenge')
+  let challenge: Base64URLString | undefined
 
-  if (searchParams.get('nextauth') === 'csrf' && !hasXChallenge) {
+  if (params?.nextauth.includes('csrf') && hasXChallenge) {
     // - post request to this route should have an existing user 
     const session = await getServerSession()
 
-    const rawChallenge = crypto.randomBytes(32)
-    const challenge = bufferToBase64UrlString(rawChallenge)
-
     if (session) {
+
+      const rawChallenge = crypto.randomBytes(32)
+      const challenge = bufferToBase64UrlString(rawChallenge)
+
       const updatedUser = await db
         .update(users)
         .set({ currentChallenge: challenge })
@@ -36,12 +38,17 @@ export async function POST(req: NextRequest, context: RouteHandlerContext) {
         .where(eq(users.id, session.user.id))
         .returning()
       if (!updatedUser) throw new Error('Failed to update user')
-    }
 
-    req.headers.set('x-challenge', challenge)
+    }
   }
 
-  return await NextAuth(req, context, authOptions)
+  const response = await NextAuth(req, context, authOptions)
+
+  if ((response as Response)) {
+    response.headers.set('x-challenge', challenge)
+  }
+
+  return response
 }
 
 export async function GET(req: NextRequest, context: RouteHandlerContext) {
@@ -50,8 +57,8 @@ export async function GET(req: NextRequest, context: RouteHandlerContext) {
   const { params } = context
 
   const hasXChallenge = !!headersStore.get('x-challenge')
-
   let challenge: Base64URLString | undefined
+
   if (params?.nextauth.includes('csrf') && hasXChallenge) {
     // - get request to this route is a potential new user 
     // - since they are new we cannot have a `currentChallenge` so we use a secure cookie instead
