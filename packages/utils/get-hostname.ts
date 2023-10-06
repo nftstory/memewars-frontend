@@ -1,6 +1,6 @@
 import Constants from 'expo-constants'
 
-export const getHostname = () => {
+export function getHostname() {
     // ! we do not use a array of schemes
     const scheme = Constants.expoConfig?.scheme as string
     const hostname = scheme?.split('.').reverse().join('.')
