@@ -11,7 +11,7 @@ const nextConfig = withExpo( {
     'react-native-web',
     'solito',
     'nativewind',
-    'rn-passkeys',
+    'react-native-passkeys',
     '@forum/passkeys',
     '@memewar/ui',
     '@expo/html-elements',
