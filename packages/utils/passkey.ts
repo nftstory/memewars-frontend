@@ -51,20 +51,9 @@ export class Passkey extends ForumPasskey {
 
             if (!passkeyResult) throw new Error('Failed to create passkey')
 
-            const {
-                id: credentialId,
-                response: { attestationObject: rawAttestationObject, clientDataJSON: rawClientDataJSON },
-            } = passkeyResult
-
             const res = await api
                 .url('/auth/callback/credentials/')
-                .post({
-                    username,
-                    rawAttestationObject,
-                    rawClientDataJSON,
-                    credentialId,
-                    csrfToken,
-                })
+                .post({ username, csrfToken, ...passkeyResult })
                 .res()
 
             if (!res || !res.ok) {

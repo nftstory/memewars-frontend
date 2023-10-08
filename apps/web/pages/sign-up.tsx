@@ -3,7 +3,6 @@ import { Pressable, Text, TextInput, View } from '@ui/components/design-system'
 import { z } from 'zod'
 import { Controller } from 'react-hook-form'
 import { useZodForm } from '@ui/hooks/use-zod-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 // import * as passkey from 'react-native-passkeys'
 import { getHostname } from '@utils/get-hostname'
 import { getBaseUrl } from '@utils/get-base-url'
@@ -35,19 +34,18 @@ export default function SignUp() {
     console.log('hostname', getHostname())
     console.log('baseUrl', getBaseUrl())
 
-    console.log(
-      'result',
-      await passkey.create({
-        challenge,
-        csrfToken,
-        user: {
-          id: asciiToBase64UrlString(username),
-          name: username,
-          displayName: username,
-        },
-        extensions: { largeBlob: { support: 'required' } },
-      }),
-    )
+    const result = await passkey.create({
+      challenge,
+      csrfToken,
+      user: {
+        id: asciiToBase64UrlString(username),
+        name: username,
+        displayName: username,
+      },
+      extensions: { largeBlob: { support: 'required' } },
+    })
+
+    console.log('result', result)
   }, [])
 
   // - on mount init a challenge
@@ -89,19 +87,26 @@ export default function SignUp() {
           name={'username'}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <>
-              <TextInput className="mt-3 px-2 py-1 border border-prim-950" value={value} onChangeText={onChange} />
+              <TextInput
+                className="mt-3 px-2 py-1 border border-prim-950"
+                value={value}
+                onChangeText={onChange}
+                autoFocus
+                autoCapitalize="none"
+                autoComplete="username"
+              />
               {error && <Text>{error.message}</Text>}
             </>
           )}
         />
 
         <Pressable
-          className={`mt-2 py-2 rounded-sm bg-prim-700 text-white ${
-            methods.formState.isSubmitting ? 'animate-pulse' : ''
-          }`}
+          className={`mt-2 py-2 rounded-sm bg-prim-700 ${methods.formState.isSubmitting ? 'animate-pulse' : ''}`}
           onPress={methods.handleSubmit(onSubmit)}
         >
-          <Text>{methods.formState.isSubmitting ? 'Creating...' : 'Create Account'}</Text>
+          <Text className="text-white text-center">
+            {methods.formState.isSubmitting ? 'Creating...' : 'Create Account'}
+          </Text>
         </Pressable>
       </View>
     </View>

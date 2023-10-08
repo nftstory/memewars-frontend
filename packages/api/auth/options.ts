@@ -30,9 +30,9 @@ export const authOptions = {
     adapter: DrizzleAdapter(db),
     session: { strategy: "jwt" } as const,
     secret: process.env.NEXTAUTH_SECRET!,
+    pages: { signIn: '/sign-up' },
     providers: [
         Credentials({
-            id: "webauthn",
             name: "WebAuthn",
             credentials: {
                 username: { label: "Username", type: "text ", placeholder: "vitalik" },
@@ -40,6 +40,8 @@ export const authOptions = {
             async authorize(credentials, response) {
                 if (!db) throw new Error('Missing db credentials')
                 if (!credentials) return null
+
+                console.log('authorize', credentials, response)
 
                 const authCredentials = webauthnAuthenticationResponseSchema.safeParse(credentials)
 
@@ -103,23 +105,18 @@ export const authOptions = {
                     const registrationCredentials = webauthnRegisterationResultSchema.safeParse(credentials)
 
                     if (registrationCredentials.success) {
-
                         // - at this point we haven't give the user an account but we have given them a challenge
                         // - so we check that the user has returned a challenge matching that on their init cookie
-                        const headers = new Headers(response.headers);
-                        const cookieEntries = headers.getSetCookie().map(cookie => cookie.split('='))
-                        const cookies = Object.fromEntries(cookieEntries)
-                        const challengeJwt = cookies?.challenge
+                        const cookies = Object.fromEntries(response.headers?.cookie?.split('; ').map(c => c.split('=') as [string, string]) ?? [])
+                        const challengeJwt = cookies?.['next-auth.challenge']
 
-                        const { payload, protectedHeader } = await jose.jwtVerify(challengeJwt, secret, {
+                        const { payload } = await jose.jwtVerify(challengeJwt, secret, {
                             issuer: process.env.NEXTAUTH_URL!,
                         })
 
-                        console.log('protectedHeader', protectedHeader)
-                        console.log('payload', payload)
-                        // TODO: recover signed challenge
+                        const expectedChallenge = payload.challenge as string;
 
-                        const expectedChallenge = ''
+                        if (!expectedChallenge) throw new Error("Could not find expected challenge")
 
                         let verification: VerifiedRegistrationResponse | undefined;
                         try {
@@ -178,4 +175,46 @@ export const authOptions = {
             },
         }),
     ],
+    callbacks: {
+        async signIn({ user, account, credentials }) {
+            console.log('signIn', { user, account, credentials })
+            // // - only authorization credentials from a passkey will contain `signature`
+            // if (!!credentials && !('signature' in credentials)) {
+            //     const { username, credentialID: credentialId } =
+            //         credentials as unknown as RNPasskeyCredentials
+
+            //     const supabaseUser = await prisma.user.create({
+            //         data: {
+            //             // rome-ignore lint/style/noNonNullAssertion: using credential provider `account` should be defined
+            //             accounts: { create: { ...account! } },
+            //             credential: { create: { credentialPublicKey: user.base64PublicKey, credentialId } },
+            //             address: user.address,
+            //             username,
+            //             publicKey: `0x${[user.x, user.y].join('').replaceAll('0x', '')}`,
+            //         },
+            //     })
+
+            //     console.log('created supabase user', { supabaseUser })
+            // }
+
+            return true
+        },
+        // ! user has been reset by this point for some reason so setting a var to handle it
+        async session({ session, token, ...rest }) {
+            const signingSecret = process.env.NEXTAUTH_SECRET
+
+            if (!signingSecret) throw new Error('Signing secret not found')
+            if (!token.name) throw new Error('Username not found')
+
+            console.log('session', { session, token, ...rest })
+            // db.insert(sessions).values({
+            //     userId: token.name,
+            //     expiresAt: new Date(session.expires),
+            // }
+
+            // tODO: init supabase jwt if we want to use it
+
+            return session
+        },
+    },
 }

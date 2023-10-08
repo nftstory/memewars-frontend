@@ -16,6 +16,7 @@ interface RouteHandlerContext {
 }
 
 export async function POST(req: NextRequest, context: RouteHandlerContext) {
+  console.log('POST', context, req)
   const { params } = context
   const headersStore = headers()
 
@@ -42,7 +43,7 @@ export async function POST(req: NextRequest, context: RouteHandlerContext) {
     }
   }
 
-  const response = await NextAuth(req, context, authOptions)
+  const response = await NextAuth(authOptions)(req, context)
 
   if ((response as Response)) {
     response.headers.set('x-challenge', challenge)
@@ -52,16 +53,21 @@ export async function POST(req: NextRequest, context: RouteHandlerContext) {
 }
 
 export async function GET(req: NextRequest, context: RouteHandlerContext) {
+  const { params } = context
+
+  if (!params?.nextauth.includes('csrf'))
+    return await NextAuth(authOptions)(req, context)
+
+  // - get request to `csrf` is a potential new user 
+  // - since they are new we cannot have a `currentChallenge` we pass it in a secure cookie instead
+
   const cookieStore = cookies()
   const headersStore = headers()
-  const { params } = context
 
   const hasXChallenge = !!headersStore.get('x-challenge')
   let challenge: Base64URLString | undefined
 
-  if (params?.nextauth.includes('csrf') && hasXChallenge) {
-    // - get request to this route is a potential new user 
-    // - since they are new we cannot have a `currentChallenge` so we use a secure cookie instead
+  if (hasXChallenge) {
 
     const rawChallenge = crypto.randomBytes(32)
     challenge = bufferToBase64UrlString(rawChallenge)
@@ -79,13 +85,11 @@ export async function GET(req: NextRequest, context: RouteHandlerContext) {
       name: 'next-auth.challenge',
       value: challengeJwt,
       domain: process.env.NEXTAUTH_URL!,
-      httpOnly: true,
       maxAge: 60 * 60, // - 1 hour,
-      secure: true
     })
   }
 
-  const response = await NextAuth(req, context, authOptions)
+  const response = await NextAuth(authOptions)(req, context)
 
   if ((response as Response)) {
     response.headers.set('x-challenge', challenge)
