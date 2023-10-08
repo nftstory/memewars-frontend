@@ -1,37 +1,36 @@
-"use client";
+import RootLayout from "./root-layout";
 
-import { TamaguiProvider } from "./TamaguiProvider";
-import { Audiowide } from "next/font/google";
-import { useEffect } from "react";
-import { insertFont } from "tamagui";
+export const metadata = {
+	title: "MemeWar.Army - Mint ALL the NFTs!",
+	description: "do it",
+	openGraph: {
+		title: "MemeWar.Army - Mint ALL the NFTs!",
+		description: "do it",
+		type: "website",
+		locale: "en_GB",
+		url: "",
+		siteName: "Memewar",
+		images: [
+			{
+				url: "",
+				width: 1024,
+				height: 1024,
+			},
+		],
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "MemeWar.Army - Mint ALL the NFTs!",
+		description: "do it.",
+		images: [
+			{
+				url: "",
+				width: 1024,
+				height: 1024,
+			},
+		],
+	},
+	// colorScheme: "dark",
+};
 
-const audiowide = Audiowide({
-	display: "swap",
-	subsets: ["latin"],
-	variable: "--font-audiowide",
-	weight: "400",
-});
-
-// ! auto-setting of tamagui fonts not working for audiowide so setting manually
-insertFont("body", {
-	family: `${audiowide.style.fontFamily}, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`,
-	weight: { 6: "400" },
-	size: { 6: 15 },
-});
-insertFont("heading", {
-	family: `${audiowide.style.fontFamily}, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`,
-	weight: { 6: "400" },
-	size: { 6: 15 },
-});
-
-export default function RootLayout({
-	children,
-}: { children: React.ReactNode }) {
-	return (
-		<html lang="en" className={`${audiowide.variable}`}>
-			<body>
-				<TamaguiProvider>{children} </TamaguiProvider>
-			</body>
-		</html>
-	);
-}
+export default RootLayout;
