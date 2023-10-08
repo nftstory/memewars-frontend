@@ -1,13 +1,37 @@
-'use client'
+"use client";
 
-import { TamaguiProvider } from './TamaguiProvider'
+import { TamaguiProvider } from "./TamaguiProvider";
+import { Audiowide } from "next/font/google";
+import { useEffect } from "react";
+import { insertFont } from "tamagui";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <body>
-        <TamaguiProvider>{children} </TamaguiProvider>
-      </body>
-    </html>
-  )
+const audiowide = Audiowide({
+	display: "swap",
+	subsets: ["latin"],
+	variable: "--font-audiowide",
+	weight: "400",
+});
+
+// ! auto-setting of tamagui fonts not working for audiowide so setting manually
+insertFont("body", {
+	family: `${audiowide.style.fontFamily}, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`,
+	weight: { 6: "400" },
+	size: { 6: 15 },
+});
+insertFont("heading", {
+	family: `${audiowide.style.fontFamily}, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`,
+	weight: { 6: "400" },
+	size: { 6: 15 },
+});
+
+export default function RootLayout({
+	children,
+}: { children: React.ReactNode }) {
+	return (
+		<html lang="en" className={`${audiowide.variable}`}>
+			<body>
+				<TamaguiProvider>{children} </TamaguiProvider>
+			</body>
+		</html>
+	);
 }

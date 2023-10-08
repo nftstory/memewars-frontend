@@ -1,6 +1,15 @@
 const { withTamagui } = require( '@tamagui/next-plugin' )
 const { join } = require( 'path' )
 
+const withPWA = require( "@ducanh2912/next-pwa" ).default( {
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  register: true,
+  sw: "service-worker.js",
+  swcMinify: true,
+} );
+
+
 const boolVals = {
   true: true,
   false: false,
@@ -9,8 +18,14 @@ const boolVals = {
 const disableExtraction =
   boolVals[process.env.DISABLE_EXTRACTION] ?? process.env.NODE_ENV === 'development'
 
+const disableBrowserLogs =
+  boolVals[process.env.DISABLE_BROWSER_LOGS] ?? process.env.NODE_ENV === 'production'
+
+// Enabling causes FOUC on page refreshes
+const optimizeCss = false // boolVals[process.env.OPTIMIZE_CSS] ?? process.env.NODE_ENV === 'production'
 
 const plugins = [
+  withPWA,
   withTamagui( {
     config: './tamagui.config.ts',
     components: ['tamagui', '@memewar/design-system'],
@@ -22,10 +37,11 @@ const plugins = [
     useReactNativeWebLite: false,
     shouldExtract: ( path ) => {
       if ( path.includes( join( 'packages', 'app' ) ) ) {
-        return true
+        return true;
       }
     },
     excludeReactNativeWebExports: ['Switch', 'ProgressBar', 'Picker', 'CheckBox', 'Touchable'],
+    platform: 'web'
   } ),
 ]
 
@@ -38,7 +54,7 @@ const nextConfig = {
   },
   modularizeImports: {
     '@tamagui/lucide-icons': {
-      transform: `@tamagui/lucide-icons/dist/esm/icons/{{kebabCase member}}`,
+      transform: "@tamagui/lucide-icons/dist/esm/icons/{{kebabCase member}}",
       skipDefaultConversion: true,
     },
   },
@@ -54,8 +70,12 @@ const nextConfig = {
     'react-native-gesture-handler'
   ],
   experimental: {
-    // forceSwcTransforms: true,
+    optimizeCss,
+    forceSwcTransforms: true,
     scrollRestoration: true,
+  },
+  compiler: {
+    removeConsole: disableBrowserLogs
   },
 }
 

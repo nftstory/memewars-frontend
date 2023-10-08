@@ -9,8 +9,8 @@ export function UserDetailScreen() {
 	const link = useLink({ href: "/" });
 
 	return (
-		<YStack f={1} jc="center" ai="center" space>
-			<Paragraph ta="center" fow="700">{`User ID: ${id}`}</Paragraph>
+		<YStack flex={1} justifyContent="center" alignItems="center" space>
+			<Paragraph textAlign="center">{`User ID: ${id}`}</Paragraph>
 			<Button {...link} icon={ChevronLeft}>
 				Go Home
 			</Button>

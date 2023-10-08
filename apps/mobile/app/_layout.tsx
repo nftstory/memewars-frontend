@@ -10,8 +10,7 @@ import { useColorScheme } from "react-native";
 
 export default function HomeLayout() {
 	const [loaded] = useFonts({
-		Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
-		InterBold: require("@tamagui/font-inter/otf/Inter-Bold.otf"),
+		audiowide: require("../assets/Audiowide-Regular.ttf"),
 	});
 	const scheme = useColorScheme();
 
