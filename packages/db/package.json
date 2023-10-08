@@ -5,7 +5,6 @@
     "generate": "bun drizzle-kit generate:pg --config=./drizzle.config.ts"
   },
   "dependencies": {
-    "@memewar/tooling": "workspace:*",
     "drizzle-orm": "^0.28.6",
     "postgres": "^3.3.5"
   },

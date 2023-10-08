@@ -1,13 +1,17 @@
 {
+  "name": "@memewar/web",
+  "version": "0.0.0",
+  "private": true,
   "dependencies": {
-    "@memewar/api": "workspace:*",
-    "@memewar/ui": "workspace:*",
+    "@tamagui/config": "latest",
+    "@tamagui/next-theme": "latest",
     "expo": "^49.0.13",
     "next": "~13.5.4",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-native": "0.70.5",
-    "react-native-web": "~0.18.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-native": "0.71.4",
+    "react-native-web": "~0.18.12",
+    "react-native-web-lite": "latest",
     "raf": "^3.4.1",
     "setimmediate": "^1.0.5",
     "solito": "^4.0.1"
@@ -16,18 +20,13 @@
     "@babel/core": "^7.19.3",
     "@biomejs/biome": "^1.2.2",
     "@expo/next-adapter": "~5.0.0",
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.31",
-    "tailwindcss": "^3.3.3"
+    "@tamagui/next-plugin": "latest"
   },
   "scripts": {
-    "start": "next dev",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "build": "next build"
-  },
-  "name": "@memewar/web",
-  "version": "1.0.0",
-  "private": true
+    "dev": "next dev",
+    "build": "cd ../.. && bun run build && cd apps/web && next build",
+    "start": "next start",
+    "serve": "NODE_ENV=production next start --port 8151",
+    "lint": "next lint"
+  }
 }

@@ -13,6 +13,6 @@ pnpm run dev
 - [x] expo
 - [ ] react-native-passkeys for passkeys
 - [ ] next-auth for sessions
-- [ ] nativewind for styles
+- [ ] nativewind / tamagui for styles
 - [ ] wagmi/viem for web3
 - [ ] react query for data

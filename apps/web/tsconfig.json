@@ -3,6 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "react-native": [
+        "react-native-web"
+      ],
       "@styles/*": [
         "./public/styles/*"
       ],
@@ -12,8 +15,11 @@
       "@db/*": [
         "../../packages/db/*"
       ],
-      "@ui/*": [
-        "../../packages/ui/*"
+      "@design-system/*": [
+        "../../packages/design-system/*"
+      ],
+      "@app/*": [
+        "../../packages/app/*"
       ],
       "@utils/*": [
         "../../packages/utils/*"

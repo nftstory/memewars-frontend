@@ -1,5 +1,46 @@
 {
-    "extends": [
-        "../../biome.json"
-    ]
+	"$schema": "https://biomejs.dev/schemas/1.2.2/schema.json",
+	"organizeImports": {
+		"enabled": true
+	},
+	"formatter": {
+		"enabled": true,
+		"lineWidth": 120,
+		"indentStyle": "space",
+		"formatWithErrors": false,
+		"indentSize": 2,
+		"ignore": []
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"a11y": {
+				"useButtonType": "off"
+			},
+			"correctness": {
+				"noUnusedVariables": "error"
+			},
+			"performance": {
+				"noDelete": "off"
+			},
+			"style": {
+				"noNonNullAssertion": "off",
+				"useShorthandArrayType": "error",
+				"noParameterAssign": "off"
+			},
+			"suspicious": {
+				"noArrayIndexKey": "off",
+				"noAssignInExpressions": "off",
+				"noExplicitAny": "off"
+			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "single",
+			"trailingComma": "all",
+			"semicolons": "asNeeded"
+		}
+	}
 }

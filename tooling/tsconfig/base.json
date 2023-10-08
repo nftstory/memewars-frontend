@@ -2,6 +2,16 @@
     "$schema": "https://json.schemastore.org/tsconfig",
     "display": "Default",
     "compilerOptions": {
+        "baseUrl": "../..",
+        "rootDir": "../..",
+        "importHelpers": true,
+        "allowJs": false,
+        "allowSyntheticDefaultImports": true,
+        "downlevelIteration": true,
+        "preserveSymlinks": true,
+        "incremental": true,
+        "jsx": "react-jsx",
+        "preserveConstEnums": true,
         "composite": false,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
@@ -15,10 +25,22 @@
         "preserveWatchOutput": true,
         "skipLibCheck": true,
         "strictNullChecks": true,
-        "strict": false
+        "strict": true,
+        "paths": {
+            "@memewar/app/*": [
+                "../../packages/app/*"
+            ],
+            "@memewar/design-system/*": [
+                "../../packages/design-system/*"
+            ]
+        }
     },
     "exclude": [
-        "node_modules",
-        "**/node_modules"
+        "**/node_modules",
+        "**/dist",
+        "**/types",
+        "**/out",
+        "**/.next",
+        "**/.tamagui"
     ]
 }
