@@ -1,4 +1,4 @@
-const { theme } = require( '@memewar/config/tailwind.config' ).default
+const { theme } = require( '../../tooling/tailwind.config' ).default
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
