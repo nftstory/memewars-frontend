@@ -15,11 +15,9 @@
     "web:prod": "bun run workspace @memewar/web build",
     "web:prod:serve": "bun run workspace @memewar/web serve",
     "fix": "manypkg fix",
-    "postinstall": "bun run check-deps && bun run build",
     "build": "bun run workspaces foreach --exclude @memewar/web run build",
     "upgrade:tamagui": "bun run up '*tamagui*'@latest '@tamagui/*'@latest react-native-web-lite@latest",
-    "upgrade:tamagui:canary": "bun run up '*tamagui*'@canary '@tamagui/*'@canary react-native-web-lite@canary",
-    "check-deps": "check-dependency-version-consistency ."
+    "upgrade:tamagui:canary": "bun run up '*tamagui*'@canary '@tamagui/*'@canary react-native-web-lite@canary"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.2.2",
