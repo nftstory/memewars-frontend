@@ -3,8 +3,8 @@ import React from "react";
 
 export default function TabsHeader() {
 	return (
-		<XStack backgroundColor={tokens.color.backgroundSecondary}>
-			<H1>memewar.army</H1>
+		<XStack backgroundColor={tokens.color.backgroundSecondary} padding="$2">
+			<H1 fontSize={24}>memewar.army</H1>
 		</XStack>
 	);
 }
