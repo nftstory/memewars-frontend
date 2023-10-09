@@ -2,7 +2,7 @@ import { Button, H1, Image, tokens, YStack } from "@memewar/design-system";
 import React from "react";
 import { useLink } from "solito/navigation";
 
-export function HomeScreen() {
+export function AuthScreen() {
 	const signupLinkProps = useLink({
 		href: "/sign-up",
 	});

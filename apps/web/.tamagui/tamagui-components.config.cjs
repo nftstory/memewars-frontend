@@ -1525,7 +1525,7 @@ var require_cjs12 = __commonJS({
         fontSize,
         lineHeight
       };
-      return process.env.NODE_ENV === "development" && props.debug && props.debug === "verbose" && (console.groupCollapsed("  \u{1F539} getFontSized", sizeTokenIn, sizeToken), console.log({ style, props, font }), console.groupEnd()), style;
+      return process.env.NODE_ENV === "development" && props.debug && props.debug === "verbose" && (console.groupCollapsed("  \u{1F539} getFontSized", sizeTokenIn, sizeToken), console.info({ style, props, font }), console.groupEnd()), style;
     }, "getFontSized");
     var cache = /* @__PURE__ */ new WeakMap();
     function getDefaultSizeToken(font) {
@@ -10503,7 +10503,7 @@ var addUpdatePortal = /* @__PURE__ */ __name((state, hostName, portalName, node)
 }, "addUpdatePortal");
 var removePortal = /* @__PURE__ */ __name((state, hostName, portalName) => {
   if (!(hostName in state))
-    return console.log(
+    return console.info(
       `Failed to remove portal '${portalName}', '${hostName}' was not registered!`
     ), state;
   const index3 = state[hostName].findIndex((item) => item.name === portalName);
@@ -17869,7 +17869,7 @@ __name(PopoverRepropagateContext, "PopoverRepropagateContext");
 function PopoverContentPortal(props) {
   const { __scopePopover } = props, zIndex = props.zIndex ?? 15e4, context = usePopoverContext(__scopePopover), popperContext = usePopperContext(__scopePopover || POPOVER_SCOPE), themeName = (0, import_core24.useThemeName)();
   let contents = props.children;
-  return (import_react_native8.Platform.OS === "android" || import_react_native8.Platform.OS === "ios") && (contents = /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(PopoverRepropagateContext, { popperContext, context, children: props.children })), /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Portal, { zIndex, children: /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(import_core24.Theme, { forceClassName: true, name: themeName, children: [
+  return (import_react_native8.Platform.OS === "android" || import_react_native8.Platform.OS === "ios") && (contents = /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(PopoverRepropagateContext, { popperContext, context, children: props.children })), /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Portal, { zIndex, children: /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(import_core24.Theme, { name: themeName, children: [
     !!context.open && !context.breakpointActive && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
       YStack,
       {
@@ -19127,7 +19127,12 @@ var SelectViewport = SelectViewportFrame.styleable(
       ) });
     if (!itemContext.interactions)
       return process.env.NODE_ENV === "development" && console.warn("No interactions provided to Select, potentially missing Adapt"), null;
-    const { style, ...floatingProps } = itemContext.interactions.getFloatingProps(), { scrollbarWidth, listStyleType, overflow, ...restStyle } = style;
+    const {
+      style,
+      // remove this, it was set to "Select" always
+      className,
+      ...floatingProps
+    } = itemContext.interactions.getFloatingProps(), { scrollbarWidth, listStyleType, overflow, ...restStyle } = style;
     return /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)(import_jsx_runtime33.Fragment, { children: [
       !disableScroll && !props.unstyled && /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
         "style",

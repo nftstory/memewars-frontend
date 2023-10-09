@@ -31336,6 +31336,15 @@
             "isStyledHOC": false
           }
         },
+        "Image": {
+          "staticConfig": {
+            "defaultProps": {},
+            "isReactNative": false,
+            "isText": false,
+            "acceptsClassName": true,
+            "isStyledHOC": false
+          }
+        },
         "Input": {
           "staticConfig": {
             "variants": {
@@ -42192,24 +42201,6 @@
             "isStyledHOC": false
           }
         },
-        "Image": {
-          "staticConfig": {
-            "defaultProps": {
-              "position": "relative",
-              "source": {
-                "uri": ""
-              }
-            },
-            "componentName": "Image",
-            "isReactNative": true,
-            "isText": false,
-            "acceptsClassName": true,
-            "inlineProps": {},
-            "isStyledHOC": false,
-            "neverFlatten": true,
-            "isHOC": true
-          }
-        },
         "ListItem": {
           "staticConfig": {
             "acceptsClassName": true,
@@ -44241,13 +44232,7 @@
   "tamaguiConfig": {
     "fonts": {
       "body": {
-        "family": {
-          "6": "var(--font-audiowide)",
-          "val": "var(--font-audiowide)",
-          "isVar": true,
-          "key": "audiowide",
-          "name": "Audiowide"
-        },
+        "family": "audiowide, -apple-system, system-ui, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif",
         "size": {
           "6": 15
         },
@@ -44258,57 +44243,21 @@
           "6": "$colorFocus",
           "7": "$color"
         },
-        "letterSpacing": {
-          "5": 2,
-          "6": 1,
-          "7": 0,
-          "8": -1,
-          "9": -2,
-          "10": -3,
-          "12": -4,
-          "14": -5,
-          "15": -6
-        },
         "face": {
           "100": {
-            "normal": {
-              "val": "var(--font-audiowide)",
-              "isVar": true,
-              "key": "audiowide",
-              "name": "Audiowide"
-            }
+            "normal": "audiowide, -apple-system, system-ui, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif"
           },
           "200": {
-            "normal": {
-              "val": "var(--font-audiowide)",
-              "isVar": true,
-              "key": "audiowide",
-              "name": "Audiowide"
-            }
+            "normal": "audiowide, -apple-system, system-ui, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif"
           },
           "300": {
-            "normal": {
-              "val": "var(--font-audiowide)",
-              "isVar": true,
-              "key": "audiowide",
-              "name": "Audiowide"
-            }
+            "normal": "audiowide, -apple-system, system-ui, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif"
           },
           "400": {
-            "normal": {
-              "val": "var(--font-audiowide)",
-              "isVar": true,
-              "key": "audiowide",
-              "name": "Audiowide"
-            }
+            "normal": "audiowide"
           },
           "500": {
-            "normal": {
-              "val": "var(--font-audiowide)",
-              "isVar": true,
-              "key": "audiowide",
-              "name": "Audiowide"
-            }
+            "normal": "audiowide"
           },
           "600": {
             "normal": "audiowide"
@@ -44325,13 +44274,7 @@
         }
       },
       "heading": {
-        "family": {
-          "6": "var(--font-audiowide)",
-          "val": "var(--font-audiowide)",
-          "isVar": true,
-          "key": "audiowide",
-          "name": "Audiowide"
-        },
+        "family": "audiowide, -apple-system, system-ui, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif",
         "size": {
           "6": 15
         },
@@ -44342,57 +44285,21 @@
           "6": "$colorFocus",
           "7": "$color"
         },
-        "letterSpacing": {
-          "5": 2,
-          "6": 1,
-          "7": 0,
-          "8": -1,
-          "9": -2,
-          "10": -3,
-          "12": -4,
-          "14": -5,
-          "15": -6
-        },
         "face": {
           "100": {
-            "normal": {
-              "val": "var(--font-audiowide)",
-              "isVar": true,
-              "key": "audiowide",
-              "name": "Audiowide"
-            }
+            "normal": "audiowide, -apple-system, system-ui, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif"
           },
           "200": {
-            "normal": {
-              "val": "var(--font-audiowide)",
-              "isVar": true,
-              "key": "audiowide",
-              "name": "Audiowide"
-            }
+            "normal": "audiowide, -apple-system, system-ui, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif"
           },
           "300": {
-            "normal": {
-              "val": "var(--font-audiowide)",
-              "isVar": true,
-              "key": "audiowide",
-              "name": "Audiowide"
-            }
+            "normal": "audiowide, -apple-system, system-ui, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif"
           },
           "400": {
-            "normal": {
-              "val": "var(--font-audiowide)",
-              "isVar": true,
-              "key": "audiowide",
-              "name": "Audiowide"
-            }
+            "normal": "audiowide"
           },
           "500": {
-            "normal": {
-              "val": "var(--font-audiowide)",
-              "isVar": true,
-              "key": "audiowide",
-              "name": "Audiowide"
-            }
+            "normal": "audiowide"
           },
           "600": {
             "normal": "audiowide"
@@ -44484,93 +44391,6 @@
       "pointerCoarse": {
         "pointer": "coarse"
       }
-    },
-    "defaultFont": "$body",
-    "shouldAddPrefersColorThemes": true,
-    "themeClassNameOnRoot": true,
-    "shorthands": {
-      "ussel": "userSelect",
-      "cur": "cursor",
-      "pe": "pointerEvents",
-      "col": "color",
-      "ff": "fontFamily",
-      "fos": "fontSize",
-      "fost": "fontStyle",
-      "fow": "fontWeight",
-      "ls": "letterSpacing",
-      "lh": "lineHeight",
-      "ta": "textAlign",
-      "tt": "textTransform",
-      "ww": "wordWrap",
-      "ac": "alignContent",
-      "ai": "alignItems",
-      "als": "alignSelf",
-      "b": "bottom",
-      "bc": "backgroundColor",
-      "bg": "backgroundColor",
-      "bbc": "borderBottomColor",
-      "bblr": "borderBottomLeftRadius",
-      "bbrr": "borderBottomRightRadius",
-      "bbw": "borderBottomWidth",
-      "blc": "borderLeftColor",
-      "blw": "borderLeftWidth",
-      "boc": "borderColor",
-      "br": "borderRadius",
-      "bs": "borderStyle",
-      "brw": "borderRightWidth",
-      "brc": "borderRightColor",
-      "btc": "borderTopColor",
-      "btlr": "borderTopLeftRadius",
-      "btrr": "borderTopRightRadius",
-      "btw": "borderTopWidth",
-      "bw": "borderWidth",
-      "dsp": "display",
-      "f": "flex",
-      "fb": "flexBasis",
-      "fd": "flexDirection",
-      "fg": "flexGrow",
-      "fs": "flexShrink",
-      "fw": "flexWrap",
-      "h": "height",
-      "jc": "justifyContent",
-      "l": "left",
-      "m": "margin",
-      "mah": "maxHeight",
-      "maw": "maxWidth",
-      "mb": "marginBottom",
-      "mih": "minHeight",
-      "miw": "minWidth",
-      "ml": "marginLeft",
-      "mr": "marginRight",
-      "mt": "marginTop",
-      "mx": "marginHorizontal",
-      "my": "marginVertical",
-      "o": "opacity",
-      "ov": "overflow",
-      "p": "padding",
-      "pb": "paddingBottom",
-      "pl": "paddingLeft",
-      "pos": "position",
-      "pr": "paddingRight",
-      "pt": "paddingTop",
-      "px": "paddingHorizontal",
-      "py": "paddingVertical",
-      "r": "right",
-      "shac": "shadowColor",
-      "shar": "shadowRadius",
-      "shof": "shadowOffset",
-      "shop": "shadowOpacity",
-      "t": "top",
-      "w": "width",
-      "zi": "zIndex",
-      "bls": "borderLeftStyle",
-      "brs": "borderRightStyle",
-      "bts": "borderTopStyle",
-      "bbs": "borderBottomStyle",
-      "bxs": "boxSizing",
-      "bxsh": "boxShadow",
-      "ox": "overflowX",
-      "oy": "overflowY"
     },
     "themes": {
       "dark": {
@@ -70839,6 +70659,55 @@
           "name": "color-192",
           "val": "hsl(53, 100%, 91.0%)",
           "variable": "var(--color-192)"
+        },
+        "white": {
+          "isVar": true,
+          "key": "$white",
+          "name": "color-193",
+          "val": "#fff",
+          "variable": "var(--color-193)"
+        },
+        "background": {
+          "isVar": true,
+          "key": "$background",
+          "name": "color-194",
+          "val": "#A8CCC5",
+          "variable": "var(--color-194)"
+        },
+        "backgroundSecondary": {
+          "isVar": true,
+          "key": "$backgroundSecondary",
+          "name": "color-195",
+          "val": "#6F9288",
+          "variable": "var(--color-195)"
+        },
+        "button": {
+          "isVar": true,
+          "key": "$button",
+          "name": "color-196",
+          "val": "#325D5B",
+          "variable": "var(--color-196)"
+        },
+        "input": {
+          "isVar": true,
+          "key": "$input",
+          "name": "color-197",
+          "val": "#1F1F1F",
+          "variable": "var(--color-197)"
+        },
+        "textPrimary": {
+          "isVar": true,
+          "key": "$textPrimary",
+          "name": "color-198",
+          "val": "#000",
+          "variable": "var(--color-198)"
+        },
+        "textSecondary": {
+          "isVar": true,
+          "key": "$textSecondary",
+          "name": "color-199",
+          "val": "#8A8A8A",
+          "variable": "var(--color-199)"
         }
       },
       "radius": {
@@ -71615,89 +71484,11 @@
         }
       }
     },
-    "inverseShorthands": {
-      "userSelect": "ussel",
-      "cursor": "cur",
-      "pointerEvents": "pe",
-      "color": "col",
-      "fontFamily": "ff",
-      "fontSize": "fos",
-      "fontStyle": "fost",
-      "fontWeight": "fow",
-      "letterSpacing": "ls",
-      "lineHeight": "lh",
-      "textAlign": "ta",
-      "textTransform": "tt",
-      "wordWrap": "ww",
-      "alignContent": "ac",
-      "alignItems": "ai",
-      "alignSelf": "als",
-      "bottom": "b",
-      "backgroundColor": "bg",
-      "borderBottomColor": "bbc",
-      "borderBottomLeftRadius": "bblr",
-      "borderBottomRightRadius": "bbrr",
-      "borderBottomWidth": "bbw",
-      "borderLeftColor": "blc",
-      "borderLeftWidth": "blw",
-      "borderColor": "boc",
-      "borderRadius": "br",
-      "borderStyle": "bs",
-      "borderRightWidth": "brw",
-      "borderRightColor": "brc",
-      "borderTopColor": "btc",
-      "borderTopLeftRadius": "btlr",
-      "borderTopRightRadius": "btrr",
-      "borderTopWidth": "btw",
-      "borderWidth": "bw",
-      "display": "dsp",
-      "flex": "f",
-      "flexBasis": "fb",
-      "flexDirection": "fd",
-      "flexGrow": "fg",
-      "flexShrink": "fs",
-      "flexWrap": "fw",
-      "height": "h",
-      "justifyContent": "jc",
-      "left": "l",
-      "margin": "m",
-      "maxHeight": "mah",
-      "maxWidth": "maw",
-      "marginBottom": "mb",
-      "minHeight": "mih",
-      "minWidth": "miw",
-      "marginLeft": "ml",
-      "marginRight": "mr",
-      "marginTop": "mt",
-      "marginHorizontal": "mx",
-      "marginVertical": "my",
-      "opacity": "o",
-      "overflow": "ov",
-      "padding": "p",
-      "paddingBottom": "pb",
-      "paddingLeft": "pl",
-      "position": "pos",
-      "paddingRight": "pr",
-      "paddingTop": "pt",
-      "paddingHorizontal": "px",
-      "paddingVertical": "py",
-      "right": "r",
-      "shadowColor": "shac",
-      "shadowRadius": "shar",
-      "shadowOffset": "shof",
-      "shadowOpacity": "shop",
-      "top": "t",
-      "width": "w",
-      "zIndex": "zi",
-      "borderLeftStyle": "bls",
-      "borderRightStyle": "brs",
-      "borderTopStyle": "bts",
-      "borderBottomStyle": "bbs",
-      "boxSizing": "bxs",
-      "boxShadow": "bxsh",
-      "overflowX": "ox",
-      "overflowY": "oy"
-    },
+    "defaultFont": "$body",
+    "shouldAddPrefersColorThemes": true,
+    "themeClassNameOnRoot": true,
+    "shorthands": {},
+    "inverseShorthands": {},
     "parsed": true,
     "getNewCSS": "Function",
     "fontSizeTokens": {},
@@ -73045,6 +72836,55 @@
         "name": "color-192",
         "val": "hsl(53, 100%, 91.0%)",
         "variable": "var(--color-192)"
+      },
+      "$color.white": {
+        "isVar": true,
+        "key": "$white",
+        "name": "color-193",
+        "val": "#fff",
+        "variable": "var(--color-193)"
+      },
+      "$color.background": {
+        "isVar": true,
+        "key": "$background",
+        "name": "color-194",
+        "val": "#A8CCC5",
+        "variable": "var(--color-194)"
+      },
+      "$color.backgroundSecondary": {
+        "isVar": true,
+        "key": "$backgroundSecondary",
+        "name": "color-195",
+        "val": "#6F9288",
+        "variable": "var(--color-195)"
+      },
+      "$color.button": {
+        "isVar": true,
+        "key": "$button",
+        "name": "color-196",
+        "val": "#325D5B",
+        "variable": "var(--color-196)"
+      },
+      "$color.input": {
+        "isVar": true,
+        "key": "$input",
+        "name": "color-197",
+        "val": "#1F1F1F",
+        "variable": "var(--color-197)"
+      },
+      "$color.textPrimary": {
+        "isVar": true,
+        "key": "$textPrimary",
+        "name": "color-198",
+        "val": "#000",
+        "variable": "var(--color-198)"
+      },
+      "$color.textSecondary": {
+        "isVar": true,
+        "key": "$textSecondary",
+        "name": "color-199",
+        "val": "#8A8A8A",
+        "variable": "var(--color-199)"
       },
       "$radius.0": {
         "isVar": true,

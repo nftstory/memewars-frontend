@@ -5,4 +5,10 @@ export const reactQueryOptions = {
     defaultOptions: {},
 };
 
+
+// tODO: allow server side prefetching with hydration
+// import { cache } from 'react'
+
+// const getQueryClient = cache(() => new QueryClient(reactQueryOptions))
+
 export const queryClient = new QueryClient(reactQueryOptions);
