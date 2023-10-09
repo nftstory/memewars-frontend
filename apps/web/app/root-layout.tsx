@@ -11,17 +11,20 @@ const audiowide = Audiowide({
 	weight: "400",
 });
 
+const audiowideFont = {
+	family: `${audiowide.style.fontFamily}, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`,
+	weight: { 6: "400" },
+	size: {
+		6: 16,
+		7: 18,
+		8: 24,
+		9: 40,
+	},
+} as const;
+
 // ! auto-setting of tamagui fonts not working for audiowide so setting manually
-insertFont("body", {
-	family: `${audiowide.style.fontFamily}, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`,
-	weight: { 6: "400" },
-	size: { 6: 15 },
-});
-insertFont("heading", {
-	family: `${audiowide.style.fontFamily}, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`,
-	weight: { 6: "400" },
-	size: { 6: 15 },
-});
+insertFont("body", audiowideFont);
+insertFont("heading", audiowideFont);
 
 export default function RootLayout({
 	children,

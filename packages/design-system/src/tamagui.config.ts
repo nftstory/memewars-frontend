@@ -1,10 +1,24 @@
-import { createTamagui } from 'tamagui'
+import { createTamagui, createTokens } from 'tamagui'
 // import { shorthands } from '@tamagui/shorthands'
-import { themes, tokens } from '@tamagui/themes'
+import { themes, tokens as baseTokens } from '@tamagui/themes'
 import { createMedia } from '@tamagui/react-native-media-driver'
 
 import { animations } from './animations'
 import { audiowideFont } from './fonts'
+
+export const tokens = createTokens({
+  ...baseTokens,
+  color: {
+    ...baseTokens.color,
+    white: '#fff',
+    background: '#A8CCC5',
+    backgroundSecondary: '#6F9288',
+    button: '#325D5B',
+    input: '#1F1F1F',
+    textPrimary: '#000',
+    textSecondary: '#8A8A8A'
+  },
+})
 
 export const config = createTamagui({
   animations,
