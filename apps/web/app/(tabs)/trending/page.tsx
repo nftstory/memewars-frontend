@@ -1,5 +1,5 @@
-"use client"
+"use client";
 
-export default function TrendingScreen() {
-	return null;
-}
+import TrendingScreen from "@memewar/app/features/trending/trending.screen";
+
+export default TrendingScreen;

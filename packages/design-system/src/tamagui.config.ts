@@ -13,6 +13,7 @@ export const tokens = createTokens({
     white: '#fff',
     background: '#A8CCC5',
     backgroundSecondary: '#6F9288',
+    backgroundTertiary: '#A4A4A4',
     button: '#325D5B',
     input: '#1F1F1F',
     textPrimary: '#000',
