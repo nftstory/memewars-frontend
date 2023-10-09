@@ -20,7 +20,11 @@ export default function SignUp() {
 			backgroundColor={tokens.color.background}
 			padding="$8"
 		>
-			<Form>
+			<Form
+				onSubmit={function (): void {
+					throw new Error("Function not implemented.");
+				}}
+			>
 				<YStack space="$3" borderRadius="$1" maxWidth={360}>
 					<YStack space="$2">
 						<H1 fontSize={24}>Choose your name</H1>
