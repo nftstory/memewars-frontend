@@ -19,12 +19,14 @@
     "expo-image": "^1.5.1",
     "expo-image-picker": "^14.5.0",
     "expo-router": "^2.0.8",
+    "immer": "^10.0.3",
     "react-hook-form": "^7.47.0",
     "react-native-passkeys": "^0.1.6",
     "remeda": "^1.27.0",
     "solito": "4.0.1",
     "viem": "^1.15.1",
     "wagmi": "^1.4.3",
-    "wretch": "^2.7.0"
+    "wretch": "^2.7.0",
+    "zustand": "^4.4.3"
   }
 }

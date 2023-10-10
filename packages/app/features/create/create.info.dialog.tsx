@@ -1,32 +1,14 @@
-import { X, Copy } from "@tamagui/lucide-icons";
-import React from "react";
-import { useState } from "react";
-import {
-	Adapt,
-	Button,
-	Dialog,
-	Fieldset,
-	Input,
-	Label,
-	Paragraph,
-	Sheet,
-	tokens,
-	TooltipSimple,
-	Unspaced,
-} from "@memewar/design-system";
+import { Button, Dialog, Unspaced, tokens } from "@memewar/design-system";
 import { BulletList } from "@memewar/design-system/src/list/bullet-list";
+import { X } from "@tamagui/lucide-icons";
+import React from "react";
 
-export const CreateInfoDialog = () => {
-	const [open, setOpen] = useState(false);
-
+export const CreateInfoDialog = ({
+	open,
+	toggleOpen,
+}: { open: boolean; toggleOpen: () => void }) => {
 	return (
-		<Dialog
-			modal
-			open={open}
-			onOpenChange={(open) => {
-				setOpen(open);
-			}}
-		>
+		<Dialog modal open={open} onOpenChange={toggleOpen}>
 			{/* <Adapt when="sm" platform="touch">
 				<Sheet animation="medium" zIndex={200000} modal dismissOnSnapToBottom>
 					<Sheet.Frame padding="$4" gap="$4">
