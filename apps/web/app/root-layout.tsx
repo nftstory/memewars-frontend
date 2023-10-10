@@ -1,7 +1,7 @@
 "use client";
 
 import { Audiowide } from "next/font/google";
-import { insertFont } from "tamagui";
+import { insertFont, isWebTouchable } from "tamagui";
 import { TamaguiProvider } from "./TamaguiProvider";
 
 const audiowide = Audiowide({
@@ -31,8 +31,16 @@ export default function RootLayout({
 }: { children: React.ReactNode }) {
 	return (
 		<html lang="en" className={`${audiowide.variable}`}>
-			<body>
-				<TamaguiProvider>{children} </TamaguiProvider>
+			<body
+				{...(isWebTouchable && {
+					style: {
+						maxHeight: "100dvh",
+						overflow: "hidden",
+						touchAction: "none",
+					},
+				})}
+			>
+				<TamaguiProvider>{children}</TamaguiProvider>
 			</body>
 		</html>
 	);

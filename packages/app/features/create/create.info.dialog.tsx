@@ -17,7 +17,7 @@ import {
 import { BulletList } from "@memewar/design-system/src/list/bullet-list";
 
 export const CreateInfoDialog = () => {
-	const [open, setOpen] = useState(true);
+	const [open, setOpen] = useState(false);
 
 	return (
 		<Dialog

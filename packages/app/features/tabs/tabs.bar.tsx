@@ -1,10 +1,6 @@
 import {
-	H5,
-	Paragraph,
-	Separator,
 	SizableText,
 	Tabs,
-	TabsContentProps,
 	tokens,
 	XStack,
 	YStack,
@@ -34,13 +30,7 @@ const TABS = [
 
 export default function TabBar() {
 	return (
-		<XStack
-			position="absolute"
-			bottom={0}
-			width="100%"
-			zIndex={1}
-			backgroundColor="$backgroundSecondary"
-		>
+		<XStack width="100%" zIndex={1} backgroundColor="$backgroundSecondary">
 			<HorizontalTabs />
 		</XStack>
 	);
@@ -54,6 +44,7 @@ const HorizontalTabs = () => {
 			orientation="horizontal"
 			flexDirection="column"
 			overflow="hidden"
+			backgroundColor={tokens.color.background}
 		>
 			<Tabs.List
 				// separator={<Separator vertical borderColor={tokens.color.black} />}
