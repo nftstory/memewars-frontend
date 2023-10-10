@@ -51,14 +51,15 @@ export const TrendingFundsDialog = () => {
 
 				<Dialog.Content
 					// bordered
-					borderRadius={"$1"}
+					borderRadius={"$0"}
 					elevate
 					key="content"
 					animateOnly={["transform", "opacity"]}
 					animation={["quick", { opacity: { overshootClamping: true } }]}
 					enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
 					exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
-					gap="$4"
+					gap="$2.5"
+					padding={"$3"}
 					maxWidth={"80%"}
 					backgroundColor={tokens.color.background}
 				>
@@ -68,32 +69,30 @@ export const TrendingFundsDialog = () => {
 					</Dialog.Description>
 
 					<XStack
-						padding="$2"
+						paddingVertical="$2"
+						paddingHorizontal="$1.5"
 						backgroundColor={tokens.color.backgroundTertiary}
-						borderRadius="$2"
 						justifyContent="space-between"
 						alignItems="center"
 					>
-						<Paragraph wordWrap="break-word" maxWidth={"85%"}>
-							0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
+						<Paragraph>
+							0xd8dA6BF26964aF9D7eE
+							{"\n"}
+							d9e03E53415D37aA96045
 						</Paragraph>
-						<Button size="$2" backgroundColor={"transparent"} icon={Copy} />
+						<Button size="$1" backgroundColor={"transparent"} icon={Copy} />
 					</XStack>
 
-					{/* <XStack alignSelf="flex-end" gap="$4">
-						<Dialog.Close displayWhenAdapted asChild>
-							<Button theme="alt1" aria-label="Close">
-								Save changes
-							</Button>
-						</Dialog.Close>
-					</XStack> */}
+					<Paragraph color={tokens.color.textSecondary} fontSize={"$5"}>
+						Current Balance 0.00 ETH
+					</Paragraph>
 
 					<Unspaced>
 						<Dialog.Close asChild>
 							<Button
 								position="absolute"
-								top="$3"
-								right="$3"
+								top="$1.5"
+								right="$1.5"
 								size="$2"
 								circular
 								backgroundColor={tokens.color.background}

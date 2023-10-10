@@ -70681,33 +70681,40 @@
           "val": "#6F9288",
           "variable": "var(--color-195)"
         },
+        "backgroundTertiary": {
+          "isVar": true,
+          "key": "$backgroundTertiary",
+          "name": "color-196",
+          "val": "#A4A4A4",
+          "variable": "var(--color-196)"
+        },
         "button": {
           "isVar": true,
           "key": "$button",
-          "name": "color-196",
+          "name": "color-197",
           "val": "#325D5B",
-          "variable": "var(--color-196)"
+          "variable": "var(--color-197)"
         },
         "input": {
           "isVar": true,
           "key": "$input",
-          "name": "color-197",
+          "name": "color-198",
           "val": "#1F1F1F",
-          "variable": "var(--color-197)"
+          "variable": "var(--color-198)"
         },
         "textPrimary": {
           "isVar": true,
           "key": "$textPrimary",
-          "name": "color-198",
+          "name": "color-199",
           "val": "#000",
-          "variable": "var(--color-198)"
+          "variable": "var(--color-199)"
         },
         "textSecondary": {
           "isVar": true,
           "key": "$textSecondary",
-          "name": "color-199",
+          "name": "color-200",
           "val": "#8A8A8A",
-          "variable": "var(--color-199)"
+          "variable": "var(--color-200)"
         }
       },
       "radius": {
@@ -72858,33 +72865,40 @@
         "val": "#6F9288",
         "variable": "var(--color-195)"
       },
+      "$color.backgroundTertiary": {
+        "isVar": true,
+        "key": "$backgroundTertiary",
+        "name": "color-196",
+        "val": "#A4A4A4",
+        "variable": "var(--color-196)"
+      },
       "$color.button": {
         "isVar": true,
         "key": "$button",
-        "name": "color-196",
+        "name": "color-197",
         "val": "#325D5B",
-        "variable": "var(--color-196)"
+        "variable": "var(--color-197)"
       },
       "$color.input": {
         "isVar": true,
         "key": "$input",
-        "name": "color-197",
+        "name": "color-198",
         "val": "#1F1F1F",
-        "variable": "var(--color-197)"
+        "variable": "var(--color-198)"
       },
       "$color.textPrimary": {
         "isVar": true,
         "key": "$textPrimary",
-        "name": "color-198",
+        "name": "color-199",
         "val": "#000",
-        "variable": "var(--color-198)"
+        "variable": "var(--color-199)"
       },
       "$color.textSecondary": {
         "isVar": true,
         "key": "$textSecondary",
-        "name": "color-199",
+        "name": "color-200",
         "val": "#8A8A8A",
-        "variable": "var(--color-199)"
+        "variable": "var(--color-200)"
       },
       "$radius.0": {
         "isVar": true,
