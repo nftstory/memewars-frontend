@@ -9,14 +9,12 @@ import {
 	Input,
 	Label,
 	Paragraph,
-	Text,
 	Sheet,
 	tokens,
 	TooltipSimple,
 	Unspaced,
-	XStack,
-	YStack,
 } from "@memewar/design-system";
+import { BulletList } from "@memewar/design-system/src/list/bullet-list";
 
 export const CreateInfoDialog = () => {
 	const [open, setOpen] = useState(true);
@@ -67,7 +65,7 @@ export const CreateInfoDialog = () => {
 				>
 					<Dialog.Title fontSize={"$7"}>Creating Memes</Dialog.Title>
 					<Dialog.Description>
-						<UnorderedList
+						<BulletList
 							data={[
 								"Collectors have 12 hours to collect.",
 								"Each edition costs 0.001 eth ($1.60).",
@@ -93,33 +91,5 @@ export const CreateInfoDialog = () => {
 				</Dialog.Content>
 			</Dialog.Portal>
 		</Dialog>
-	);
-};
-
-const UnorderedList = ({
-	data,
-	bullet = "\u2022",
-	...rest
-}: { data: string[]; bullet?: string } & React.ComponentProps<
-	typeof YStack
->) => {
-	return (
-		<YStack space={"$2"} {...rest}>
-			{data.map((item, index) => {
-				return (
-					<XStack key={`unordered-list-${index}`}>
-						<Text
-							borderColor={tokens.color.background}
-							borderLeftWidth={"$1"}
-							paddingLeft={"$1"}
-						>
-							{bullet}
-						</Text>
-
-						<Text style={{ flex: 1, paddingLeft: 5 }}>{item}</Text>
-					</XStack>
-				);
-			})}
-		</YStack>
 	);
 };

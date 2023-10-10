@@ -5,7 +5,7 @@ import { YStack, tokens } from "@memewar/design-system";
 
 export default function TabLayout({ children }: React.PropsWithChildren) {
 	return (
-		<YStack backgroundColor={tokens.color.background}>
+		<YStack backgroundColor={tokens.color.background} flex={1}>
 			<TabsHeader />
 			{children}
 			<TabBar />
