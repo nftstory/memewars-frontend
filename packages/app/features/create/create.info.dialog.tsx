@@ -1,0 +1,125 @@
+import { X, Copy } from "@tamagui/lucide-icons";
+import React from "react";
+import { useState } from "react";
+import {
+	Adapt,
+	Button,
+	Dialog,
+	Fieldset,
+	Input,
+	Label,
+	Paragraph,
+	Text,
+	Sheet,
+	tokens,
+	TooltipSimple,
+	Unspaced,
+	XStack,
+	YStack,
+} from "@memewar/design-system";
+
+export const CreateInfoDialog = () => {
+	const [open, setOpen] = useState(true);
+
+	return (
+		<Dialog
+			modal
+			open={open}
+			onOpenChange={(open) => {
+				setOpen(open);
+			}}
+		>
+			{/* <Adapt when="sm" platform="touch">
+				<Sheet animation="medium" zIndex={200000} modal dismissOnSnapToBottom>
+					<Sheet.Frame padding="$4" gap="$4">
+						<Adapt.Contents />
+					</Sheet.Frame>
+					<Sheet.Overlay
+						animation="lazy"
+						enterStyle={{ opacity: 0 }}
+						exitStyle={{ opacity: 0 }}
+					/>
+				</Sheet>
+			</Adapt> */}
+
+			<Dialog.Portal>
+				<Dialog.Overlay
+					key="overlay"
+					animation="quick"
+					opacity={0.5}
+					enterStyle={{ opacity: 0 }}
+					exitStyle={{ opacity: 0 }}
+				/>
+
+				<Dialog.Content
+					// bordered
+					borderRadius={"$0"}
+					elevate
+					key="content"
+					animateOnly={["transform", "opacity"]}
+					animation={["quick", { opacity: { overshootClamping: true } }]}
+					enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
+					exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
+					gap="$2.5"
+					padding={"$3"}
+					maxWidth={"80%"}
+					backgroundColor={tokens.color.background}
+				>
+					<Dialog.Title fontSize={"$7"}>Creating Memes</Dialog.Title>
+					<Dialog.Description>
+						<UnorderedList
+							data={[
+								"Collectors have 12 hours to collect.",
+								"Each edition costs 0.001 eth ($1.60).",
+								"You are the sole owner of your NFT contract.",
+								"A 0.00005 ($0.08) fee applies to each edition sold.",
+							]}
+						/>
+					</Dialog.Description>
+
+					<Unspaced>
+						<Dialog.Close asChild>
+							<Button
+								position="absolute"
+								top="$1.5"
+								right="$1.5"
+								size="$2"
+								circular
+								backgroundColor={tokens.color.background}
+								icon={X}
+							/>
+						</Dialog.Close>
+					</Unspaced>
+				</Dialog.Content>
+			</Dialog.Portal>
+		</Dialog>
+	);
+};
+
+const UnorderedList = ({
+	data,
+	bullet = "\u2022",
+	...rest
+}: { data: string[]; bullet?: string } & React.ComponentProps<
+	typeof YStack
+>) => {
+	return (
+		<YStack space={"$2"} {...rest}>
+			{data.map((item, index) => {
+				return (
+					<XStack key={`unordered-list-${index}`}>
+						<Text
+							borderColor={tokens.color.background}
+							borderLeftWidth={"$1"}
+							paddingLeft={"$1"}
+						>
+							{bullet}
+						</Text>
+
+						<Text style={{ flex: 1, paddingLeft: 5 }}>{item}</Text>
+					</XStack>
+				);
+			})}
+		</YStack>
+	);
+};

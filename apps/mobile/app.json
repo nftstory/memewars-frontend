@@ -36,6 +36,14 @@
       "eas": {
         "projectId": "[your_project_id]"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share your memes"
+        }
+      ]
+    ]
   }
 }

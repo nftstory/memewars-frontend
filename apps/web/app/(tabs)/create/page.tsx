@@ -1,5 +1,3 @@
-"use client"
+"use client";
 
-export default function CreateScreen() {
-	return null;
-}
+export { CreateScreen as default } from "@memewar/app/features/create/create.screen";

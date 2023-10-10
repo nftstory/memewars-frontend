@@ -17,6 +17,7 @@
     "abitype": "^0.9.9",
     "burnt": "^0.11.0",
     "expo-image": "^1.5.1",
+    "expo-image-picker": "^14.5.0",
     "expo-router": "^2.0.8",
     "react-hook-form": "^7.47.0",
     "react-native-passkeys": "^0.1.6",
