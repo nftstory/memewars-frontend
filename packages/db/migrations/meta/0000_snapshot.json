@@ -42,7 +42,7 @@
           "name": "expires_at",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "token_type": {
           "name": "token_type",

@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS "accounts" (
 	"provider_account_id" text,
 	"refresh_token" text,
 	"access_token" text,
-	"expires_at" integer NOT NULL,
+	"expires_at" integer,
 	"token_type" text,
 	"scope" text,
 	"id_token" text,

@@ -4,16 +4,18 @@ import { relations } from "drizzle-orm"
 import type { Base64URLString } from "@forum/passkeys"
 import type { Address } from 'abitype'
 
+type AccountType = AdapterAccount["type"] | 'credentials'
+
 /**
  * - Tables
  */
 export const accounts = pgTable("accounts", {
-    type: text("type").$type<AdapterAccount["type"]>().notNull(),
+    type: text("type").$type<AccountType>().notNull(),
     provider: text("provider"),
     providerAccountId: text("provider_account_id"),
     refresh_token: text("refresh_token"),
     access_token: text("access_token"),
-    expires_at: integer("expires_at").notNull(),
+    expires_at: integer("expires_at"),
     token_type: text("token_type"),
     scope: text("scope"),
     id_token: text("id_token"),
