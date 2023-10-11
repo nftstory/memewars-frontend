@@ -20,7 +20,8 @@ export const CreateMemeInput = ({
 		console.log(result);
 
 		if (!result.canceled) {
-			const uri = result.assets[0].uri;
+			const { uri, height, width } = result.assets[0];
+			// TODO: do we want to store original aspect ratio?
 			if (uri) form.setValue("image", uri);
 		}
 	};

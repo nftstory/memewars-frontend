@@ -1,12 +1,7 @@
+import { YStack, tokens } from "@memewar/design-system";
 import React from "react";
 import TabBar from "./tabs.bar";
 import TabsHeader from "./tabs.header";
-import {
-	tokens,
-	isWebTouchable,
-	YStack,
-	ScrollView,
-} from "@memewar/design-system";
 
 export default function TabLayout({ children }: React.PropsWithChildren) {
 	return (

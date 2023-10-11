@@ -18,7 +18,9 @@ export const CreateForm = () => {
 	const image = methods.watch("image");
 
 	const onSubmit = useCallback(
-		methods.handleSubmit((data) => {}),
+		methods.handleSubmit((data) => {
+			console.log("submit", data);
+		}),
 		[],
 	);
 

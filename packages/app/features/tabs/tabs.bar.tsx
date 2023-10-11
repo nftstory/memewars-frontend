@@ -5,6 +5,7 @@ import {
 	XStack,
 	YStack,
 } from "@memewar/design-system";
+import { useRouter } from "@memewar/app/hooks/use-router";
 import React from "react";
 
 import { ArrowUpRight, PlusCircle, Smile } from "@tamagui/lucide-icons";
@@ -37,6 +38,7 @@ export default function TabBar() {
 }
 
 const HorizontalTabs = () => {
+	const router = useRouter();
 	return (
 		<Tabs
 			defaultValue={TABS[0].key}
@@ -62,6 +64,7 @@ const HorizontalTabs = () => {
 						borderColor={tokens.color.black}
 						flexDirection="column"
 						minHeight={64}
+						onPress={() => router.push(`/${key}`)}
 					>
 						<YStack>
 							<Icon size={40} strokeWidth={1} />

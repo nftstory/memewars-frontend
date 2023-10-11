@@ -9,6 +9,7 @@ import { useServerInsertedHTML } from "next/navigation";
 import React from "react";
 import { StyleSheet } from "react-native";
 import { createTamagui, TamaguiProvider as BaseTamaguiProvider } from "tamagui";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import Tamagui from "../tamagui.config";
 
@@ -66,7 +67,7 @@ export const TamaguiProvider = ({
 				themeClassNameOnRoot
 				defaultTheme={theme}
 			>
-				{children}
+				<SafeAreaProvider>{children}</SafeAreaProvider>
 			</BaseTamaguiProvider>
 		</NextThemeProvider>
 	);

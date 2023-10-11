@@ -1,5 +1,6 @@
 import {
 	Button,
+	Form,
 	Paragraph,
 	XStack,
 	YStack,
@@ -62,15 +63,16 @@ export const CreateMemeReview = ({
 				</XStack>
 			</YStack>
 			<YStack>
-				<Button
-					onPress={() => null}
-					fontSize={24}
-					color={tokens.color.white}
-					backgroundColor={tokens.color.button}
-					marginHorizontal={"$2"}
-				>
-					Create meme
-				</Button>
+				<Form.Trigger asChild>
+					<Button
+						fontSize={24}
+						color={tokens.color.white}
+						backgroundColor={tokens.color.button}
+						marginHorizontal={"$2"}
+					>
+						Create meme
+					</Button>
+				</Form.Trigger>
 				<Pressable onPress={toggleInformationDialog}>
 					<XStack
 						alignItems="center"
