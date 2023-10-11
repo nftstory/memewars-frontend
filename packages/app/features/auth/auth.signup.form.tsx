@@ -1,4 +1,3 @@
-import React from "react";
 import {
 	Button,
 	H1,
@@ -11,7 +10,14 @@ import {
 	Text,
 } from "@memewar/design-system";
 
+import React from "react";
+import { Controller } from "react-hook-form";
+
+import { useSignUpForm } from "./auth.signup.hook";
+
 export default function SignUp() {
+	const { signUp, ...methods } = useSignUpForm();
+
 	return (
 		<YStack
 			flex={1}
@@ -20,11 +26,7 @@ export default function SignUp() {
 			backgroundColor={tokens.color.background}
 			padding="$8"
 		>
-			<Form
-				onSubmit={function (): void {
-					throw new Error("Function not implemented.");
-				}}
-			>
+			<Form onSubmit={signUp}>
 				<YStack space="$3" borderRadius="$1" maxWidth={360}>
 					<YStack space="$2">
 						<H1 fontSize={24}>Choose your name</H1>
@@ -32,7 +34,25 @@ export default function SignUp() {
 							Account names are visible to others.
 						</Paragraph>
 					</YStack>
-					<Input borderColor={tokens.color.input} borderRadius={"$1"} />
+					<Controller
+						control={methods.control}
+						rules={{ required: true }}
+						name={"username"}
+						render={({ field: { onChange, value }, fieldState: { error } }) => (
+							<>
+								<Input
+									borderColor={tokens.color.input}
+									borderRadius={"$1"}
+									value={value}
+									onChangeText={onChange}
+									autoFocus
+									autoCapitalize="none"
+									autoComplete="username"
+								/>
+								{error && <Text>{error.message}</Text>}
+							</>
+						)}
+					/>
 					<Form.Trigger asChild>
 						<Button
 							size={"$3"}
@@ -42,7 +62,9 @@ export default function SignUp() {
 							borderRadius={"$1"}
 							color={tokens.color.white}
 						>
-							Create Account
+							{methods.formState.isSubmitting
+								? "Creating..."
+								: "Create Account"}
 						</Button>
 					</Form.Trigger>
 				</YStack>

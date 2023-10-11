@@ -1,47 +1,38 @@
-import {
-	CustomToast,
-	TamaguiProvider,
-	TamaguiProviderProps,
-	ToastProvider,
-} from "@memewar/design-system";
-import { useColorScheme } from "react-native";
+import { CustomToast, ToastProvider } from "@memewar/design-system";
 
 import { IS_DEV } from "@memewar/app/constants";
 import { queryClient } from "@memewar/app/lib/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { ToastViewport } from "./toast-viewport";
-import config from "../tamagui.config";
 import React from "react";
+import { ToastViewport } from "./toast-viewport";
+import { TamaguiProvider } from "@memewar/app/provider/tamagui";
+import { SessionProvider } from "./session";
 
-export function Provider({
-	children,
-	...rest
-}: Omit<TamaguiProviderProps, "config">) {
-	const scheme = useColorScheme();
+export function Provider({ children }: React.PropsWithChildren) {
 	return (
-		<TamaguiProvider
-			config={config}
-			disableInjectCSS
-			defaultTheme={scheme === "dark" ? "dark" : "light"}
-			{...rest}
-		>
-			<QueryClientProvider client={queryClient}>
-				<ToastProvider
-					swipeDirection="horizontal"
-					duration={6000}
-					native={["mobile"]}
-				>
-					{children}
+		<SafeAreaProvider>
+			<TamaguiProvider>
+				<SessionProvider>
+					<QueryClientProvider client={queryClient}>
+						<ToastProvider
+							swipeDirection="horizontal"
+							duration={6000}
+							native={["mobile"]}
+						>
+							{children}
 
-					<CustomToast />
+							<CustomToast />
 
-					<ToastViewport />
-				</ToastProvider>
+							<ToastViewport />
+						</ToastProvider>
 
-				{IS_DEV && <ReactQueryDevtools initialIsOpen={false} />}
-			</QueryClientProvider>
-		</TamaguiProvider>
+						{IS_DEV && <ReactQueryDevtools initialIsOpen={false} />}
+					</QueryClientProvider>
+				</SessionProvider>
+			</TamaguiProvider>
+		</SafeAreaProvider>
 	);
 }

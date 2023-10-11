@@ -3,27 +3,17 @@
 import "@tamagui/core/reset.css";
 import "@tamagui/polyfill-dev";
 
-import { config as configBase } from "@tamagui/config/v2";
 import { NextThemeProvider, useRootTheme } from "@tamagui/next-theme";
 import { useServerInsertedHTML } from "next/navigation";
 import React from "react";
 import { StyleSheet } from "react-native";
 import { createTamagui, TamaguiProvider as BaseTamaguiProvider } from "tamagui";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-
-import Tamagui from "../tamagui.config";
+import { config as configBase } from "@memewar/design-system";
 
 const config = createTamagui({
 	...configBase,
 	themeClassNameOnRoot: false,
 });
-
-export type Conf = typeof config;
-
-declare module "tamagui" {
-	// biome-ignore lint/suspicious/noEmptyInterface: <explanation>
-	interface TamaguiCustomConfig extends Conf {}
-}
 
 export const TamaguiProvider = ({
 	children,
@@ -43,7 +33,7 @@ export const TamaguiProvider = ({
 				<style
 					// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
 					dangerouslySetInnerHTML={{
-						__html: Tamagui.getCSS({
+						__html: configBase.getCSS({
 							// if you are using "outputCSS" option, you should use this "exclude"
 							// if not, then you can leave the option out
 							exclude:
@@ -67,7 +57,7 @@ export const TamaguiProvider = ({
 				themeClassNameOnRoot
 				defaultTheme={theme}
 			>
-				<SafeAreaProvider>{children}</SafeAreaProvider>
+				{children}
 			</BaseTamaguiProvider>
 		</NextThemeProvider>
 	);

@@ -1,12 +1,24 @@
-import { Button, Paragraph, YStack, tokens } from "@memewar/design-system";
+import {
+	Button,
+	Paragraph,
+	YStack,
+	tokens,
+	useToastController,
+} from "@memewar/design-system";
 import * as ImagePicker from "expo-image-picker";
-import React from "react";
+import React, { useCallback } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { CreateMemeForm } from "./create.form.schema";
+import { useSession } from "@memewar/app/hooks/use-session";
+import { useRouter } from "@memewar/app/hooks/use-router";
 
 export const CreateMemeInput = ({
 	form,
 }: { form: UseFormReturn<CreateMemeForm> }) => {
+	const { data: session } = useSession();
+	const toast = useToastController();
+	const router = useRouter();
+
 	const pickImage = async () => {
 		const result = await ImagePicker.launchImageLibraryAsync({
 			// tODO: ask Nicholas about desired `mediaTypes`
@@ -26,13 +38,25 @@ export const CreateMemeInput = ({
 		}
 	};
 
+	const onChooseImage = async () => {
+		if (session) return await pickImage();
+		const toastDuration = 2_000;
+		setTimeout(() => {
+			router.push("/auth");
+		}, toastDuration);
+		toast.show("You must be logged in to upload an image", {
+			duration: toastDuration,
+			variant: "error",
+		});
+	};
+
 	return (
 		<YStack space={"$5"} marginVertical="auto">
 			<Button
 				backgroundColor={tokens.color.button}
 				color={tokens.color.white}
 				fontSize={24}
-				onPress={pickImage}
+				onPress={onChooseImage}
 			>
 				Choose Image
 			</Button>

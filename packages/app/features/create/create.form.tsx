@@ -4,10 +4,12 @@ import { CreateMemeReview } from "./create.meme.review";
 import { CreateMemeInput } from "./create.meme.input";
 import { Form, YStack } from "@memewar/design-system";
 import { useZodForm } from "@memewar/app/hooks/use-zod-form";
+import { useSession } from "@memewar/app/hooks/use-session";
 import { createMemeSchema } from "./create.form.schema";
 import { useCreateMemeStore } from "./create.store";
 
 export const CreateForm = () => {
+	const { data: session } = useSession();
 	const { isInformationDialogOpen, toggleInformationDialog } =
 		useCreateMemeStore((state) => ({
 			isInformationDialogOpen: state.isInformationDialogOpen,
@@ -19,9 +21,9 @@ export const CreateForm = () => {
 
 	const onSubmit = useCallback(
 		methods.handleSubmit((data) => {
-			console.log("submit", data);
+			console.log("submit", data, session);
 		}),
-		[],
+		[session],
 	);
 
 	return (

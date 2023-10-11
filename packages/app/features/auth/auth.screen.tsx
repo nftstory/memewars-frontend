@@ -41,7 +41,7 @@ export function AuthScreen() {
 							backgroundColor={tokens.color.button}
 							color={tokens.color.white}
 							borderRadius={"$1"}
-							// tODO: button text should be fontSize 24
+							fontSize={24}
 						>
 							Sign Up
 						</Button>
@@ -51,6 +51,7 @@ export function AuthScreen() {
 							size={"$5"}
 							borderColor={tokens.color.input}
 							borderRadius={"$1"}
+							fontSize={24}
 						>
 							Sign In
 						</Button>

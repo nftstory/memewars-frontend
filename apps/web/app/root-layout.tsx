@@ -2,7 +2,7 @@
 
 import { Audiowide } from "next/font/google";
 import { insertFont, isWebTouchable } from "tamagui";
-import { TamaguiProvider } from "./TamaguiProvider";
+import { Provider } from "@memewar/app/provider";
 
 const audiowide = Audiowide({
 	display: "swap",
@@ -40,7 +40,7 @@ export default function RootLayout({
 					},
 				})}
 			>
-				<TamaguiProvider>{children}</TamaguiProvider>
+				<Provider>{children}</Provider>
 			</body>
 		</html>
 	);

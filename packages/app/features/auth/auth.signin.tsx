@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, H1, Image, tokens, YStack } from "@memewar/design-system";
-import { useLink } from "solito/navigation";
 
 export default function SignIn() {
 	return (
