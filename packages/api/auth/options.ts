@@ -1,5 +1,5 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { authenticators, db, users } from "@db/index";
+import { accounts, authenticators, db, users } from "@memewar/db/index";
 import { eq, sql } from 'drizzle-orm'
 import Credentials from "next-auth/providers/credentials";
 import * as jose from 'jose'
@@ -11,7 +11,7 @@ import {
 } from "@simplewebauthn/server";
 import { expectedOrigin, rpID } from "../constants";
 import { type Base64URLString, webauthnAuthenticationResponseSchema, webauthnRegisterationResultSchema } from "@forum/passkeys/src/utils/webauthn-zod";
-import { base64UrlStringtoBuffer, bufferToBase64UrlString } from "@utils/base64-url";
+import { base64UrlStringtoBuffer, bufferToBase64UrlString } from "@memewar/utils/base64-url";
 
 /**
  * Prepared statements can be used across serverless executions and so will be much faster 
@@ -23,13 +23,17 @@ const getUsersAuthenticator = db.query.authenticators.findFirst({
     with: { user: { with: { accounts: true } } }
 }).prepare('getUsersAuthenticator')
 
-const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET!)
+// biome-ignore lint/style/noNonNullAssertion: <explanation>
+const NEXTAUTH_URL = process.env.NEXTAUTH_URL!
+// biome-ignore lint/style/noNonNullAssertion: <explanation>
+const secret = process.env.NEXTAUTH_SECRET!
+const encodedSecret = new TextEncoder().encode(secret)
 
 export const authOptions = {
     debug: process.env.NODE_ENV !== "production",
     adapter: DrizzleAdapter(db),
     session: { strategy: "jwt" } as const,
-    secret: process.env.NEXTAUTH_SECRET!,
+    secret,
     pages: { signIn: '/sign-up' },
     providers: [
         Credentials({
@@ -41,7 +45,7 @@ export const authOptions = {
                 if (!db) throw new Error('Missing db credentials')
                 if (!credentials) return null
 
-                console.log('authorize', credentials, response)
+                console.log('authorize', credentials)
 
                 const authCredentials = webauthnAuthenticationResponseSchema.safeParse(credentials)
 
@@ -110,8 +114,8 @@ export const authOptions = {
                         const cookies = Object.fromEntries(response.headers?.cookie?.split('; ').map(c => c.split('=') as [string, string]) ?? [])
                         const challengeJwt = cookies?.['next-auth.challenge']
 
-                        const { payload } = await jose.jwtVerify(challengeJwt, secret, {
-                            issuer: process.env.NEXTAUTH_URL!,
+                        const { payload } = await jose.jwtVerify(challengeJwt, encodedSecret, {
+                            issuer: NEXTAUTH_URL,
                         })
 
                         const expectedChallenge = payload.challenge as string;
@@ -159,15 +163,26 @@ export const authOptions = {
                         let user: typeof users.$inferSelect | null = null
 
                         await db.transaction(async (tx) => {
-                            await tx.insert(authenticators).values(authenticator)
                             const userResult = await tx.insert(users).values({
                                 username: credentials.username,
                             }).returning()
 
                             user = userResult[0] || null
+
+                            if (!user) throw new Error('Failed to create user')
+
+                            await tx.insert(authenticators).values({ ...authenticator, userId: user.id })
+                            await tx.insert(accounts).values({
+                                providerAccountId: user.id,
+                                userId: user.id,
+                                type: 'credentials',
+                                provider: 'credentials'
+                            })
+
                         })
 
-                        return user
+                        // @ts-ignore: fixme this is wrong it is returning a value the closure is fucking it up
+                        return { ...user, authenticator }
                     }
                 }
 
@@ -199,14 +214,29 @@ export const authOptions = {
 
             return true
         },
+        async jwt({ token, user, ...rest }) {
+
+            console.log("jwt", { token, user, ...rest })
+            if (user?.username) token.username = user.username
+            if (user?.authenticator) token.authenticator = user.authenticator
+
+            return token
+        },
         // ! user has been reset by this point for some reason so setting a var to handle it
         async session({ session, token, ...rest }) {
-            const signingSecret = process.env.NEXTAUTH_SECRET
-
-            if (!signingSecret) throw new Error('Signing secret not found')
-            if (!token.name) throw new Error('Username not found')
-
             console.log('session', { session, token, ...rest })
+
+            if (token?.sub && token?.username) {
+                session.user = {
+                    id: token.sub,
+                    username: token.username,
+                    authenticator: token.authenticator,
+                }
+            }
+
+            // if (!secret) throw new Error('Signing secret not found')
+            // if (!token.name) throw new Error('Username not found')
+
             // db.insert(sessions).values({
             //     userId: token.name,
             //     expiresAt: new Date(session.expires),

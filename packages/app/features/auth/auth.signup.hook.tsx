@@ -6,7 +6,7 @@ import { Passkey } from "@memewar/utils/passkey";
 import { api } from "@memewar/utils/api";
 import { type Base64URLString } from "@forum/passkeys";
 import { asciiToBase64UrlString } from "@memewar/utils/base64-url";
-import { usernameFormSchema } from "./auth.signup.form.schema";
+import { csrfTokenSchema, usernameFormSchema } from "./auth.signup.form.schema";
 
 const passkey = new Passkey();
 

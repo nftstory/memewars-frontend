@@ -10,13 +10,22 @@ import {
 	Text,
 } from "@memewar/design-system";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
 import { useSignUpForm } from "./auth.signup.hook";
+import { useRouter } from "@memewar/app/hooks/use-router";
+import { useSession } from "@memewar/app/hooks/use-session";
 
 export default function SignUp() {
 	const { signUp, ...methods } = useSignUpForm();
+	const router = useRouter();
+	const { data: session } = useSession();
+
+	useEffect(() => {
+		console.log("session", session);
+		if (session) router.push("/");
+	}, [session]);
 
 	return (
 		<YStack
@@ -47,7 +56,7 @@ export default function SignUp() {
 									onChangeText={onChange}
 									autoFocus
 									autoCapitalize="none"
-									autoComplete="username"
+									autoComplete="username webauthn"
 								/>
 								{error && <Text>{error.message}</Text>}
 							</>
