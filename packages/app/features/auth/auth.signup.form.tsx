@@ -25,7 +25,7 @@ export default function SignUp() {
 	useEffect(() => {
 		console.log("session", session);
 		if (session) router.push("/");
-	}, [session]);
+	}, [session, router]);
 
 	return (
 		<YStack

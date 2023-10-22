@@ -27,9 +27,9 @@ export const CreateMemeReview = ({
 		<YStack space={"$2"}>
 			<Pressable onPress={() => pickImage(form.setValue)}>
 				<YStack
-					maxHeight={"100vw"}
 					backgroundColor={"white"}
 					width={"100vw"}
+					$gtSm={{ maxWidth: "40vw" }}
 					aspectRatio={1}
 				>
 					<Image

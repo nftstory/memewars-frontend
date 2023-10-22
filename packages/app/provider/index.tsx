@@ -1,36 +1,37 @@
-import { CustomToast, ToastProvider } from "@memewar/design-system";
-
 import { IS_DEV } from "@memewar/app/constants";
-import { queryClient } from "@memewar/app/lib/react-query";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-import React from "react";
-import { ToastViewport } from "./toast-viewport";
-import { TamaguiProvider } from "@memewar/app/provider/tamagui";
+import { config } from "@memewar/app/lib/wagmi";
+import { QueryProvider } from "@memewar/app/provider/query";
 import { SafeAreaProvider } from "@memewar/app/provider/safe-area";
+import { TamaguiProvider } from "@memewar/app/provider/tamagui";
+import { CustomToast, ToastProvider } from "@memewar/design-system";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import React from "react";
+import { WagmiProvider } from "wagmi";
 import { SessionProvider } from "./session";
+import { ToastViewport } from "./toast-viewport";
 
 export function Provider({ children }: React.PropsWithChildren) {
 	return (
 		<SafeAreaProvider>
 			<TamaguiProvider>
 				<SessionProvider>
-					<QueryClientProvider client={queryClient}>
-						<ToastProvider
-							swipeDirection="horizontal"
-							duration={6000}
-							native={["mobile"]}
-						>
-							{children}
+					<WagmiProvider config={config}>
+						<QueryProvider>
+							<ToastProvider
+								swipeDirection="horizontal"
+								duration={6000}
+								native={["mobile"]}
+							>
+								{children}
 
-							<CustomToast />
+								<CustomToast />
 
-							<ToastViewport />
-						</ToastProvider>
+								<ToastViewport />
+							</ToastProvider>
 
-						{IS_DEV && <ReactQueryDevtools initialIsOpen={false} />}
-					</QueryClientProvider>
+							{IS_DEV && <ReactQueryDevtools initialIsOpen={false} />}
+						</QueryProvider>
+					</WagmiProvider>
 				</SessionProvider>
 			</TamaguiProvider>
 		</SafeAreaProvider>

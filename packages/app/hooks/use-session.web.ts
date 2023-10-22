@@ -1,1 +1,2 @@
-export { useSession } from 'next-auth/react'
+"use client";
+export { useSession } from "next-auth/react";

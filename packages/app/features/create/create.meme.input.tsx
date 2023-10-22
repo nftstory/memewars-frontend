@@ -19,6 +19,9 @@ export const CreateMemeInput = ({
 	const toast = useToastController();
 	const router = useRouter();
 
+	console.log("session", session);
+
+	// TODO: limit gif size to 3mb for gifs
 	const pickImage = async () => {
 		const result = await ImagePicker.launchImageLibraryAsync({
 			// tODO: ask Nicholas about desired `mediaTypes`
