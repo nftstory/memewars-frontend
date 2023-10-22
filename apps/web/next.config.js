@@ -27,6 +27,7 @@ const optimizeCss = false // boolVals[process.env.OPTIMIZE_CSS] ?? process.env.N
 const plugins = [
   withPWA,
   withTamagui( {
+    appDir: true,
     config: './tamagui.config.ts',
     components: ['tamagui', '@memewar/design-system'],
     importsWhitelist: ['constants.js', 'colors.js'],
