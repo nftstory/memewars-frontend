@@ -39,6 +39,13 @@ export const useSignUpForm = () => {
 			});
 
 			console.log("result", result);
+
+			// TODO: What do we want to do if the users device doesn't support largeBlob?
+			// ! for now we will block the user from using the application if this is the case
+			if (!result?.clientExtensionResults.largeBlob?.supported)
+				throw new Error("Device not supported");
+
+			return result;
 		},
 		[],
 	);

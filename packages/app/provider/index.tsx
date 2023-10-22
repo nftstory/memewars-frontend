@@ -9,6 +9,7 @@ import React from "react";
 import { WagmiProvider } from "wagmi";
 import { SessionProvider } from "./session";
 import { ToastViewport } from "./toast-viewport";
+import { useAutoConnect } from "../hooks/use-auto-connect";
 
 export function Provider({ children }: React.PropsWithChildren) {
 	return (
@@ -22,7 +23,7 @@ export function Provider({ children }: React.PropsWithChildren) {
 								duration={6000}
 								native={["mobile"]}
 							>
-								{children}
+								<InnerProvider>{children}</InnerProvider>
 
 								<CustomToast />
 
@@ -37,3 +38,10 @@ export function Provider({ children }: React.PropsWithChildren) {
 		</SafeAreaProvider>
 	);
 }
+
+// - a place to put app level hooks that need to run within the query/wagmi providers
+const InnerProvider = ({ children }: React.PropsWithChildren) => {
+	useAutoConnect();
+
+	return <>{children}</>;
+};

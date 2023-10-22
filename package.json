@@ -25,5 +25,8 @@
     "bun-types": "latest",
     "encoding": "^0.1.13",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "permissionless": "^0.0.8"
   }
 }
