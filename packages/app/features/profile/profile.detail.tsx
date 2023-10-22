@@ -4,7 +4,7 @@ import React from "react";
 import { useParams } from "@memewar/app/hooks/use-params";
 import { useLink } from "@memewar/app/hooks/use-link";
 
-export function UserDetailScreen() {
+export function ProfileDetailScreen() {
 	const { id } = useParams<{ id: string }>();
 	const link = useLink({ href: "/" });
 
