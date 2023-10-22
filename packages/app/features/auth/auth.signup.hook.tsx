@@ -1,11 +1,11 @@
-import { useCallback, useEffect } from "react";
-import { useZodForm } from "@memewar/app/hooks/use-zod-form";
-import { getHostname } from "@memewar/utils/get-hostname";
-import { getBaseUrl } from "@memewar/utils/get-base-url";
-import { Passkey } from "@memewar/utils/passkey";
-import { api } from "@memewar/utils/api";
 import { type Base64URLString } from "@forum/passkeys";
-import { asciiToBase64UrlString } from "@memewar/utils/base64-url";
+import { useZodForm } from "@memewar/app/hooks/use-zod-form";
+import { Passkey } from "@memewar/app/lib/passkey";
+import { api } from "@memewar/utils/api";
+import { AsciiString, asciiToBase64UrlString } from "@memewar/utils/base64-url";
+import { getBaseUrl } from "@memewar/utils/get-base-url";
+import { getHostname } from "@memewar/utils/get-hostname";
+import { useCallback, useEffect } from "react";
 import { csrfTokenSchema, usernameFormSchema } from "./auth.signup.form.schema";
 
 const passkey = new Passkey();
@@ -31,7 +31,7 @@ export const useSignUpForm = () => {
 				challenge,
 				csrfToken,
 				user: {
-					id: asciiToBase64UrlString(username),
+					id: asciiToBase64UrlString(username as AsciiString),
 					name: username,
 					displayName: username,
 				},
