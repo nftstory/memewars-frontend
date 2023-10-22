@@ -6055,15 +6055,19 @@ var require_handleScroll = __commonJS({
             availableScrollTop += position;
           }
         }
-        target = target.parentNode;
+        if (target instanceof ShadowRoot) {
+          target = target.host;
+        } else {
+          target = target.parentNode;
+        }
       } while (
         // portaled content
         !targetInLock && target !== document.body || // self content
         targetInLock && (endTarget.contains(target) || endTarget === target)
       );
-      if (isDeltaPositive && (noOverscroll && availableScroll === 0 || !noOverscroll && delta > availableScroll)) {
+      if (isDeltaPositive && (noOverscroll && Math.abs(availableScroll) < 1 || !noOverscroll && delta > availableScroll)) {
         shouldCancelScroll = true;
-      } else if (!isDeltaPositive && (noOverscroll && availableScrollTop === 0 || !noOverscroll && -delta > availableScrollTop)) {
+      } else if (!isDeltaPositive && (noOverscroll && Math.abs(availableScrollTop) < 1 || !noOverscroll && -delta > availableScrollTop)) {
         shouldCancelScroll = true;
       }
       return shouldCancelScroll;
@@ -6172,7 +6176,7 @@ var require_SideEffect = __commonJS({
         }
         var delta = "deltaY" in event ? (0, exports.getDeltaXY)(event) : (0, exports.getTouchXY)(event);
         var sourceEvent = shouldPreventQueue.current.filter(function(e) {
-          return e.name === event.type && e.target === event.target && deltaCompare(e.delta, delta);
+          return e.name === event.type && (e.target === event.target || event.target === e.shadowParent) && deltaCompare(e.delta, delta);
         })[0];
         if (sourceEvent && sourceEvent.should) {
           if (event.cancelable) {
@@ -6193,7 +6197,7 @@ var require_SideEffect = __commonJS({
         }
       }, []);
       var shouldCancel = React39.useCallback(function(name, delta, target, should) {
-        var event = { name, delta, target, should };
+        var event = { name, delta, target, should, shadowParent: getOutermostShadowParent(target) };
         shouldPreventQueue.current.push(event);
         setTimeout(function() {
           shouldPreventQueue.current = shouldPreventQueue.current.filter(function(e) {
@@ -6240,6 +6244,18 @@ var require_SideEffect = __commonJS({
     }
     __name(RemoveScrollSideCar, "RemoveScrollSideCar");
     exports.RemoveScrollSideCar = RemoveScrollSideCar;
+    function getOutermostShadowParent(node) {
+      var shadowParent = null;
+      while (node !== null) {
+        if (node instanceof ShadowRoot) {
+          shadowParent = node.host;
+          node = node.host;
+        }
+        node = node.parentNode;
+      }
+      return shadowParent;
+    }
+    __name(getOutermostShadowParent, "getOutermostShadowParent");
   }
 });
 
@@ -6911,9 +6927,9 @@ var require_types3 = __commonJS({
   }
 });
 
-// ../../node_modules/@tamagui/simple-hash/dist/cjs/index.js
+// ../../node_modules/@tamagui/helpers/node_modules/@tamagui/simple-hash/dist/cjs/index.js
 var require_cjs21 = __commonJS({
-  "../../node_modules/@tamagui/simple-hash/dist/cjs/index.js"(exports, module2) {
+  "../../node_modules/@tamagui/helpers/node_modules/@tamagui/simple-hash/dist/cjs/index.js"(exports, module2) {
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;

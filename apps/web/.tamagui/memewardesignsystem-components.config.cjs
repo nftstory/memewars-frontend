@@ -665,8 +665,7 @@ var require_side_effect = __commonJS({
         return SideEffect;
       }
     });
-    var _interop_require_wildcard = require_interop_require_wildcard();
-    var _react = /* @__PURE__ */ _interop_require_wildcard._(require("react"));
+    var _react = require("react");
     var isServer2 = typeof window === "undefined";
     var useClientOnlyLayoutEffect = isServer2 ? () => {
     } : _react.useLayoutEffect;
@@ -3764,11 +3763,11 @@ var require_image_external = __commonJS({
     }
     __name(_export, "_export");
     _export(exports, {
-      default: function() {
-        return _default;
-      },
       unstable_getImgProps: function() {
         return unstable_getImgProps;
+      },
+      default: function() {
+        return _default;
       }
     });
     var _interop_require_default = require_interop_require_default();
@@ -7575,46 +7574,34 @@ var require_createDOMProps = __commonJS({
 var require_interopRequireWildcard = __commonJS({
   "../../node_modules/@babel/runtime/helpers/interopRequireWildcard.js"(exports, module2) {
     var _typeof = require_typeof()["default"];
-    function _getRequireWildcardCache(nodeInterop) {
-      if (typeof WeakMap !== "function")
+    function _getRequireWildcardCache(e) {
+      if ("function" != typeof WeakMap)
         return null;
-      var cacheBabelInterop = /* @__PURE__ */ new WeakMap();
-      var cacheNodeInterop = /* @__PURE__ */ new WeakMap();
-      return (_getRequireWildcardCache = /* @__PURE__ */ __name(function _getRequireWildcardCache2(nodeInterop2) {
-        return nodeInterop2 ? cacheNodeInterop : cacheBabelInterop;
-      }, "_getRequireWildcardCache"))(nodeInterop);
+      var r = /* @__PURE__ */ new WeakMap(), t2 = /* @__PURE__ */ new WeakMap();
+      return (_getRequireWildcardCache = /* @__PURE__ */ __name(function _getRequireWildcardCache2(e2) {
+        return e2 ? t2 : r;
+      }, "_getRequireWildcardCache"))(e);
     }
     __name(_getRequireWildcardCache, "_getRequireWildcardCache");
-    function _interopRequireWildcard(obj, nodeInterop) {
-      if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-      }
-      if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") {
+    function _interopRequireWildcard(e, r) {
+      if (!r && e && e.__esModule)
+        return e;
+      if (null === e || "object" != _typeof(e) && "function" != typeof e)
         return {
-          "default": obj
+          "default": e
         };
-      }
-      var cache = _getRequireWildcardCache(nodeInterop);
-      if (cache && cache.has(obj)) {
-        return cache.get(obj);
-      }
-      var newObj = {};
-      var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-      for (var key in obj) {
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-          var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-          if (desc && (desc.get || desc.set)) {
-            Object.defineProperty(newObj, key, desc);
-          } else {
-            newObj[key] = obj[key];
-          }
+      var t2 = _getRequireWildcardCache(r);
+      if (t2 && t2.has(e))
+        return t2.get(e);
+      var n = {
+        __proto__: null
+      }, a = Object.defineProperty && Object.getOwnPropertyDescriptor;
+      for (var u in e)
+        if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) {
+          var i = a ? Object.getOwnPropertyDescriptor(e, u) : null;
+          i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u];
         }
-      }
-      newObj["default"] = obj;
-      if (cache) {
-        cache.set(obj, newObj);
-      }
-      return newObj;
+      return n["default"] = e, t2 && t2.set(e, n), n;
     }
     __name(_interopRequireWildcard, "_interopRequireWildcard");
     module2.exports = _interopRequireWildcard, module2.exports.__esModule = true, module2.exports["default"] = module2.exports;
@@ -30465,15 +30452,19 @@ var require_handleScroll = __commonJS({
             availableScrollTop += position;
           }
         }
-        target = target.parentNode;
+        if (target instanceof ShadowRoot) {
+          target = target.host;
+        } else {
+          target = target.parentNode;
+        }
       } while (
         // portaled content
         !targetInLock && target !== document.body || // self content
         targetInLock && (endTarget.contains(target) || endTarget === target)
       );
-      if (isDeltaPositive && (noOverscroll && availableScroll === 0 || !noOverscroll && delta > availableScroll)) {
+      if (isDeltaPositive && (noOverscroll && Math.abs(availableScroll) < 1 || !noOverscroll && delta > availableScroll)) {
         shouldCancelScroll = true;
-      } else if (!isDeltaPositive && (noOverscroll && availableScrollTop === 0 || !noOverscroll && -delta > availableScrollTop)) {
+      } else if (!isDeltaPositive && (noOverscroll && Math.abs(availableScrollTop) < 1 || !noOverscroll && -delta > availableScrollTop)) {
         shouldCancelScroll = true;
       }
       return shouldCancelScroll;
@@ -30582,7 +30573,7 @@ var require_SideEffect = __commonJS({
         }
         var delta = "deltaY" in event ? (0, exports.getDeltaXY)(event) : (0, exports.getTouchXY)(event);
         var sourceEvent = shouldPreventQueue.current.filter(function(e) {
-          return e.name === event.type && e.target === event.target && deltaCompare(e.delta, delta);
+          return e.name === event.type && (e.target === event.target || event.target === e.shadowParent) && deltaCompare(e.delta, delta);
         })[0];
         if (sourceEvent && sourceEvent.should) {
           if (event.cancelable) {
@@ -30603,7 +30594,7 @@ var require_SideEffect = __commonJS({
         }
       }, []);
       var shouldCancel = React45.useCallback(function(name2, delta, target, should) {
-        var event = { name: name2, delta, target, should };
+        var event = { name: name2, delta, target, should, shadowParent: getOutermostShadowParent(target) };
         shouldPreventQueue.current.push(event);
         setTimeout(function() {
           shouldPreventQueue.current = shouldPreventQueue.current.filter(function(e) {
@@ -30650,6 +30641,18 @@ var require_SideEffect = __commonJS({
     }
     __name(RemoveScrollSideCar, "RemoveScrollSideCar");
     exports.RemoveScrollSideCar = RemoveScrollSideCar;
+    function getOutermostShadowParent(node) {
+      var shadowParent = null;
+      while (node !== null) {
+        if (node instanceof ShadowRoot) {
+          shadowParent = node.host;
+          node = node.host;
+        }
+        node = node.parentNode;
+      }
+      return shadowParent;
+    }
+    __name(getOutermostShadowParent, "getOutermostShadowParent");
   }
 });
 
@@ -31321,9 +31324,9 @@ var require_types3 = __commonJS({
   }
 });
 
-// ../../node_modules/@tamagui/simple-hash/dist/cjs/index.js
+// ../../node_modules/@tamagui/helpers/node_modules/@tamagui/simple-hash/dist/cjs/index.js
 var require_cjs22 = __commonJS({
-  "../../node_modules/@tamagui/simple-hash/dist/cjs/index.js"(exports, module2) {
+  "../../node_modules/@tamagui/helpers/node_modules/@tamagui/simple-hash/dist/cjs/index.js"(exports, module2) {
     var __defProp2 = Object.defineProperty;
     var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
     var __getOwnPropNames2 = Object.getOwnPropertyNames;
@@ -34783,7 +34786,7 @@ var SolitoImage = (0, import_react2.forwardRef)(/* @__PURE__ */ __name(function 
   const { loader } = useSolitoImageContext();
   return (0, import_react_native_web.unstable_createElement)(import_image.default, {
     ...props,
-    // ref: mergeRefs([ref, localRef]),
+    ref,
     loader: props.loader ?? loader,
     fill,
     style: [
