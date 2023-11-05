@@ -57,6 +57,7 @@ export default function SignUp() {
 									onChangeText={onChange}
 									autoFocus
 									autoCapitalize="none"
+									// @ts-expect-error: webauthn not typed correctly but is supported
 									autoComplete="username webauthn"
 								/>
 								{error && <Text>{error.message}</Text>}

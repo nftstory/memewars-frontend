@@ -1,6 +1,6 @@
 import base64 from "@hexagon/base64";
 
-import type { Base64URLString, Base64String } from "@forum/passkeys";
+import type { Base64URLString, Base64String } from "webauthn-zod";
 
 export type AsciiString = string & { __brand: "AsciiString" };
 

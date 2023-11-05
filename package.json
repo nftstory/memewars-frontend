@@ -26,6 +26,10 @@
     "encoding": "^0.1.13",
     "typescript": "^5.2.2"
   },
+  "overrides": {
+    "viem": "beta",
+    "wagmi": "beta"
+  },
   "resolutions": {
     "viem": "beta",
     "wagmi": "beta"

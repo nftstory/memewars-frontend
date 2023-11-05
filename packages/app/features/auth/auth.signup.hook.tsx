@@ -1,16 +1,23 @@
 import { type Base64URLString } from "webauthn-zod";
 import { useZodForm } from "@memewar/app/hooks/use-zod-form";
-import { Passkey } from "@memewar/app/lib/passkey";
 import { api } from "@memewar/utils/api";
-import { AsciiString, asciiToBase64UrlString } from "@memewar/utils/base64-url";
+// import { AsciiString, asciiToBase64UrlString } from "@memewar/utils/base64-url";
 import { getBaseUrl } from "@memewar/utils/get-base-url";
 import { getHostname } from "@memewar/utils/get-hostname";
 import { useCallback, useEffect } from "react";
 import { csrfTokenSchema, usernameFormSchema } from "./auth.signup.form.schema";
-
-const passkey = new Passkey();
+import { useConnect } from "wagmi";
+import { getPasskeyWalletClient } from "@memewar/app/lib/large-blob-account";
+import { useToastController } from "@memewar/design-system";
+import { defaultChainId, getChainAndTransport } from "@memewar/app/lib/wagmi";
+import { getAlchemyProvider } from "@memewar/app/lib/alchemy";
+import { passkeyConnector } from "@forum/passkeys/packages/passkeys";
+import { WalletClientSigner } from "@alchemy/aa-core";
 
 export const useSignUpForm = () => {
+	const { connect } = useConnect();
+	const { show: toast } = useToastController();
+
 	const methods = useZodForm({ schema: usernameFormSchema });
 
 	const signUp = useCallback<Parameters<typeof methods["handleSubmit"]>[0]>(
@@ -27,27 +34,61 @@ export const useSignUpForm = () => {
 			console.log("hostname", getHostname());
 			console.log("baseUrl", getBaseUrl());
 
-			const result = await passkey.create({
-				challenge,
-				csrfToken,
-				user: {
-					id: asciiToBase64UrlString(username as AsciiString),
-					name: username,
-					displayName: username,
-				},
-				extensions: { largeBlob: { support: "required" } },
-			});
+			try {
+				const { chain } = getChainAndTransport(defaultChainId);
 
-			console.log("result", result);
+				const walletClient = await getPasskeyWalletClient({
+					username,
+					chainId: chain.id,
+				});
+				console.log("after walletClient", await walletClient.getAddresses());
 
-			// TODO: What do we want to do if the users device doesn't support largeBlob?
-			// ! for now we will block the user from using the application if this is the case
-			if (!result?.clientExtensionResults.largeBlob?.supported)
-				throw new Error("Device not supported");
+				/** A largeBlob passkey *CAN* more than more signer that will sign in a single verification
+				 * is this something we want to add?
+				 *
+				 * Accounts could have both EOA & R1 signers that (under certain conditions?) could both be required
+				 * with no difference to UX.
+				 *
+				 */
+				const signer = new WalletClientSigner(
+					walletClient,
+					"largeBlob-passkey-signer",
+				);
+				const provider = getAlchemyProvider({ signer, chain });
+				connect(
+					{ connector: passkeyConnector({ signer, chain, provider }) },
+					{
+						onSuccess: (...args) =>
+							console.log("connected passkey account", { ...args }),
+						onError: (...args) =>
+							console.log("failed to connect passkey account", { ...args }),
+					},
+				);
+			} catch (e) {
+				toast((e as Error).message);
+			}
 
-			return result;
+			// const result = await passkey.create({
+			// 	challenge,
+			// 	csrfToken,
+			// 	user: {
+			// 		id: asciiToBase64UrlString(username as AsciiString),
+			// 		name: username,
+			// 		displayName: username,
+			// 	},
+			// 	extensions: { largeBlob: { support: "required" } },
+			// });
+
+			// console.log("result", result);
+
+			// // TODO: What do we want to do if the users device doesn't support largeBlob?
+			// // ! for now we will block the user from using the application if this is the case
+			// if (!result?.clientExtensionResults.largeBlob?.supported)
+			// 	throw new Error("Device not supported");
+
+			// return result;
 		},
-		[],
+		[connect, toast],
 	);
 
 	// - on mount init a challenge

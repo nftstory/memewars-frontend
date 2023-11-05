@@ -1,6 +1,6 @@
 import { Base64URLString } from "webauthn-zod";
 import { getChainAndTransport } from "./wagmi";
-import { LargeBlobPasskeyAccount } from "@forum/passkeys";
+import { LargeBlobPasskeyAccount } from "@forum/passkeys/packages/passkeys";
 import { Passkey } from "./passkey";
 import {
 	type EIP1193RequestFn,
@@ -25,8 +25,10 @@ export async function getPasskeyWalletClient({
 	} Wallet Client`;
 
 	return createWalletClient({
+		// @ts-expect-error: still need to implement signMessage & signTypedData
 		account,
 		chain,
+		// @ts-ignore
 		transport: (chain) => {
 			const tport = transport(chain);
 			return {

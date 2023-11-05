@@ -5,7 +5,7 @@ import {
 	PublicKeyCredentialRequestOptionsJSON,
 	RegistrationResponseJSON,
 } from "webauthn-zod";
-import { Passkey as ForumPasskey } from "@forum/passkeys/packages/passkeys";
+import { Passkey as LargeBlobPasskey } from "@forum/passkeys/packages/passkeys";
 import * as passkeys from "react-native-passkeys";
 
 import { z } from "zod";
@@ -19,9 +19,16 @@ import {
 import { getHostname } from "@memewar/utils/get-hostname";
 import { api } from "@memewar/utils/api";
 
+import type {
+	VerifiedAuthenticationResponse,
+	VerifiedRegistrationResponse,
+	VerifyAuthenticationResponseOpts,
+	VerifyRegistrationResponseOpts,
+} from "@simplewebauthn/server";
+
 const hostname = getHostname();
 
-const rp = { id: hostname, name: "Memewars" } as const;
+const rp = { id: hostname, name: "bzz.store" } as const;
 
 // - define a zod schema to validate the largeblob data
 const blobStorageSchema = z.object({ privateKey: zodHexString });
@@ -37,7 +44,7 @@ const blobStorer = (blobData: SecretBlob): Base64URLString =>
 	);
 
 // TODO: convert these to be static methods?
-export class Passkey extends ForumPasskey {
+export class Passkey extends LargeBlobPasskey {
 	constructor(
 		params?: Partial<
 			Pick<
@@ -47,6 +54,30 @@ export class Passkey extends ForumPasskey {
 		>,
 	) {
 		super({ ...params, rp });
+	}
+
+	async generateRegistrationOptions(
+		options: Omit<PublicKeyCredentialCreationOptionsJSON, "challenge">,
+	): Promise<PublicKeyCredentialCreationOptionsJSON> {
+		return {} as PublicKeyCredentialCreationOptionsJSON;
+	}
+
+	async generateAuthenticationOptions(
+		options: Omit<PublicKeyCredentialRequestOptionsJSON, "challenge">,
+	): Promise<PublicKeyCredentialRequestOptionsJSON> {
+		return {} as PublicKeyCredentialRequestOptionsJSON;
+	}
+
+	async verifyAuthentication(
+		options: VerifyAuthenticationResponseOpts,
+	): Promise<VerifiedAuthenticationResponse> {
+		return {} as VerifiedAuthenticationResponse;
+	}
+
+	async verifyRegistration(
+		options: VerifyRegistrationResponseOpts,
+	): Promise<VerifiedRegistrationResponse> {
+		return {} as VerifiedRegistrationResponse;
 	}
 
 	async create(
@@ -137,4 +168,4 @@ export class Passkey extends ForumPasskey {
 	}
 }
 
-// export type PasskeyAuthResult = ReturnType<InstanceType<typeof ForumPasskey>['signR1']>
+// export type PasskeyAuthResult = ReturnType<InstanceType<typeof LargeBlobPasskey>['signR1']>

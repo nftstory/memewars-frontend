@@ -27,7 +27,6 @@ const optimizeCss = false // boolVals[process.env.OPTIMIZE_CSS] ?? process.env.N
 const plugins = [
   withPWA,
   withTamagui( {
-    appDir: true,
     config: './tamagui.config.ts',
     components: ['tamagui', '@memewar/design-system'],
     importsWhitelist: ['constants.js', 'colors.js'],
@@ -68,11 +67,13 @@ const nextConfig = {
     'react-native-passkeys',
     '@forum/passkeys',
     'webauthn-zod',
+    'webauthn-server-actions',
     '@memewar/design-system',
     'react-native-gesture-handler'
   ],
   experimental: {
     optimizeCss,
+    serverActions: true,
     forceSwcTransforms: true,
     scrollRestoration: true,
   },
