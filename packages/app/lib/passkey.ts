@@ -1,11 +1,11 @@
 import {
 	type Base64URLString,
 	AuthenticationResponseJSON,
-	Passkey as ForumPasskey,
 	PublicKeyCredentialCreationOptionsJSON,
 	PublicKeyCredentialRequestOptionsJSON,
 	RegistrationResponseJSON,
-} from "@forum/passkeys";
+} from "webauthn-zod";
+import { Passkey as ForumPasskey } from "@forum/passkeys/packages/passkeys";
 import * as passkeys from "react-native-passkeys";
 
 import { z } from "zod";

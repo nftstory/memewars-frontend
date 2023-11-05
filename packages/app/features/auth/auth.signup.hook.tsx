@@ -1,4 +1,4 @@
-import { type Base64URLString } from "@forum/passkeys";
+import { type Base64URLString } from "webauthn-zod";
 import { useZodForm } from "@memewar/app/hooks/use-zod-form";
 import { Passkey } from "@memewar/app/lib/passkey";
 import { api } from "@memewar/utils/api";

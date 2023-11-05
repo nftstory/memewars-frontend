@@ -7,14 +7,14 @@ const analytics = {} as any;
 
 export function useAutoConnect() {
 	const { data: session } = useSession();
-	const { isConnected } = useAccount();
-	const { connect } = useConnect();
+	// const { isConnected } = useAccount();
+	// const { connect } = useConnect();
 
-	useEffect(() => {
-		if (!isConnected && session?.user?.username)
-			console.log("session", session?.user?.username);
-		// connectWithPasskey({ username: session?.user?.username});
-	}, [isConnected, session?.user]);
+	// useEffect(() => {
+	// 	if (!isConnected && session?.user?.username)
+	// 		console.log("session", session?.user?.username);
+	// 	// connectWithPasskey({ username: session?.user?.username});
+	// }, [isConnected, session?.user]);
 
 	useAccountEffect({
 		onConnect({ address, isReconnected, connector }) {

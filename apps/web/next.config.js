@@ -67,6 +67,7 @@ const nextConfig = {
     'solito',
     'react-native-passkeys',
     '@forum/passkeys',
+    'webauthn-zod',
     '@memewar/design-system',
     'react-native-gesture-handler'
   ],

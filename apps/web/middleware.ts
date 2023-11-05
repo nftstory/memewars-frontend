@@ -15,7 +15,7 @@ export default withAuth(
 		}
 		return NextResponse.next();
 	},
-	{ pages: { signIn: "/auth", signOut: "/auth", error: "/auth" } },
+	{ pages: { signIn: "/sign-up", signOut: "/auth", error: "/auth" } },
 );
 
 export const config = {

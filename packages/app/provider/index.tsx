@@ -1,10 +1,10 @@
-import { IS_DEV } from "@memewar/app/constants";
+// import { IS_BROWSER, IS_DEV, IS_WEB } from "@memewar/app/constants";
 import { config } from "@memewar/app/lib/wagmi";
 import { QueryProvider } from "@memewar/app/provider/query";
 import { SafeAreaProvider } from "@memewar/app/provider/safe-area";
 import { TamaguiProvider } from "@memewar/app/provider/tamagui";
 import { CustomToast, ToastProvider } from "@memewar/design-system";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React from "react";
 import { WagmiProvider } from "wagmi";
 import { SessionProvider } from "./session";
@@ -30,7 +30,7 @@ export function Provider({ children }: React.PropsWithChildren) {
 								<ToastViewport />
 							</ToastProvider>
 
-							{IS_DEV && <ReactQueryDevtools initialIsOpen={false} />}
+							{/* {IS_BROWSER && <ReactQueryDevtools initialIsOpen={false} />} */}
 						</QueryProvider>
 					</WagmiProvider>
 				</SessionProvider>

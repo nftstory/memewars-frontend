@@ -14,7 +14,8 @@ export function AuthScreen() {
 		<>
 			{/* TODO: fix types on tamagui vs our exports */}
 			<Image
-				src="/img/main-bg.png"
+				source={{ uri: "/img/main-bg.png" }}
+				// src="/img/main-bg.png"
 				fill
 				resizeMode="cover"
 				objectFit="cover"

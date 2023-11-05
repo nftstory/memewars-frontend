@@ -5,6 +5,7 @@
     "@auth/drizzle-adapter": "^0.3.3",
     "@forum/passkeys": "forumdaos/passkeys#counterfactual-account",
     "@simplewebauthn/server": "^8.2.0",
-    "next-auth": "^4.23.2"
+    "next-auth": "^4.23.2",
+    "webauthn-zod": "^0.1.3"
   }
 }

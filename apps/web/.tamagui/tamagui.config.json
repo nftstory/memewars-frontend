@@ -70671,7 +70671,7 @@
           "isVar": true,
           "key": "$background",
           "name": "color-194",
-          "val": "#A8CCC5",
+          "val": "#FFDFA0",
           "variable": "var(--color-194)"
         },
         "backgroundSecondary": {
@@ -70692,7 +70692,7 @@
           "isVar": true,
           "key": "$button",
           "name": "color-197",
-          "val": "#325D5B",
+          "val": "#FFB629",
           "variable": "var(--color-197)"
         },
         "input": {
@@ -72855,7 +72855,7 @@
         "isVar": true,
         "key": "$background",
         "name": "color-194",
-        "val": "#A8CCC5",
+        "val": "#FFDFA0",
         "variable": "var(--color-194)"
       },
       "$color.backgroundSecondary": {
@@ -72876,7 +72876,7 @@
         "isVar": true,
         "key": "$button",
         "name": "color-197",
-        "val": "#325D5B",
+        "val": "#FFB629",
         "variable": "var(--color-197)"
       },
       "$color.input": {

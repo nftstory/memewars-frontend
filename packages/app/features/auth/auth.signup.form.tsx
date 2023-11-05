@@ -4,6 +4,7 @@ import {
 	Paragraph,
 	Form,
 	Image,
+	// @ts-ignore
 	tokens,
 	YStack,
 	Input,

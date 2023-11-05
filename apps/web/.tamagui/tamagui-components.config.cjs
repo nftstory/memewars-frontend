@@ -7895,16 +7895,17 @@ function useStore(api, selector = api.getState, equalityFn) {
     selector,
     equalityFn
   );
-  (0, import_react26.useDebugValue)(slice);
+  useDebugValue(slice);
   return slice;
 }
-var import_react26, import_with_selector, useSyncExternalStoreWithSelector, didWarnAboutEqualityFn, createImpl, create, react;
+var import_react26, import_with_selector, useDebugValue, useSyncExternalStoreWithSelector, didWarnAboutEqualityFn, createImpl, create, react;
 var init_esm = __esm({
   "../../node_modules/zustand/esm/index.js"() {
     init_vanilla();
     init_vanilla();
-    import_react26 = require("react");
+    import_react26 = __toESM(require("react"));
     import_with_selector = __toESM(require_with_selector());
+    ({ useDebugValue } = import_react26.default);
     ({ useSyncExternalStoreWithSelector } = import_with_selector.default);
     didWarnAboutEqualityFn = false;
     __name(useStore, "useStore");
