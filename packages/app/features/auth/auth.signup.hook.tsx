@@ -1,11 +1,10 @@
 import { type Base64URLString } from "webauthn-zod";
 import { useZodForm } from "@memewar/app/hooks/use-zod-form";
-import { api } from "@memewar/utils/api";
 // import { AsciiString, asciiToBase64UrlString } from "@memewar/utils/base64-url";
 import { getBaseUrl } from "@memewar/utils/get-base-url";
 import { getHostname } from "@memewar/utils/get-hostname";
 import { useCallback, useEffect } from "react";
-import { csrfTokenSchema, usernameFormSchema } from "./auth.signup.form.schema";
+import { usernameFormSchema } from "./auth.signup.form.schema";
 import { useConnect } from "wagmi";
 import { getPasskeyWalletClient } from "@memewar/app/lib/large-blob-account";
 import { useToastController } from "@memewar/design-system";
@@ -13,6 +12,7 @@ import { defaultChainId, getChainAndTransport } from "@memewar/app/lib/wagmi";
 import { getAlchemyProvider } from "@memewar/app/lib/alchemy";
 import { passkeyConnector } from "@forum/passkeys/packages/passkeys";
 import { WalletClientSigner } from "@alchemy/aa-core";
+import { generateChallenge } from "@memewar/utils/generate-challenge";
 
 export const useSignUpForm = () => {
 	const { connect } = useConnect();
@@ -60,8 +60,10 @@ export const useSignUpForm = () => {
 					{
 						onSuccess: (...args) =>
 							console.log("connected passkey account", { ...args }),
-						onError: (...args) =>
-							console.log("failed to connect passkey account", { ...args }),
+						onError: (...args) => {
+							console.log("failed to connect passkey account", { ...args });
+							throw args[0];
+						},
 					},
 				);
 			} catch (e) {
@@ -94,28 +96,9 @@ export const useSignUpForm = () => {
 	// - on mount init a challenge
 	useEffect(() => {
 		// tODO: only do this if we do not have a session / redirect if the user has a session
-		api
-			.headers({ "x-challenge": "true" })
-			.get("/auth/csrf")
-			.res()
-			.then(async (res) => {
-				if (!res.ok) throw new Error("Failed to fetch token");
-
-				const { csrfToken } = csrfTokenSchema.parse(await res.json());
-
-				const challenge = res.headers.get("x-challenge");
-
-				// ? too harsh throwing an error here?
-				if (!challenge || !csrfToken)
-					throw new Error("Something went wrong initing challenge");
-
-				// TODO: write an abstraction for storage here
-				localStorage.setItem("csrfToken", csrfToken);
-				localStorage.setItem("challenge", challenge);
-			})
-			.catch((e) => {
-				console.error("failed to fetch challenge", e);
-			});
+		generateChallenge().catch((e) => {
+			console.error("failed to fetch challenge", e);
+		});
 	}, []);
 
 	return { signUp: methods.handleSubmit(signUp), ...methods };

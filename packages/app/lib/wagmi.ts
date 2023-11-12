@@ -2,16 +2,31 @@ import { http, createConfig } from "wagmi";
 import { Chain, baseGoerli as baseGoerli_ } from "wagmi/chains";
 import { defineChain } from "viem";
 
+type ChainIdString = string
+
+interface AlchemyApiKey {
+	/**
+	 * The alchemy api key for the chain
+	 */
+	key: string;
+	/**
+	 * The alchemy chain name e.g. base-goerli
+	 */
+	name: string;
+}
+
 // - define alchemy baseGoerli chain
 
 const ALCHEMY_API_KEYS = (
 	process.env.NEXT_PUBLIC_ALCHEMY_API_KEYS
 		? JSON.parse(process.env.NEXT_PUBLIC_ALCHEMY_API_KEYS)
 		: {}
-) as Record<string, { key: string; name: string }>;
+) as Record<ChainIdString, AlchemyApiKey>;
 
+
+// ! any other chains should be added to the env var (which should be JSON) 
 const getAlchemyChainUrl = (id: number) => {
-	const alchemyChain = ALCHEMY_API_KEYS?.[String(id)];
+	const alchemyChain: AlchemyApiKey | undefined = ALCHEMY_API_KEYS?.[String(id)];
 	if (alchemyChain)
 		return `https://${alchemyChain.name}.g.alchemy.com/v2/${alchemyChain.key}`;
 };

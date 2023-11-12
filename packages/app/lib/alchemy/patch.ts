@@ -81,8 +81,7 @@ export interface BaseSmartAccountParams<
 
 export abstract class BaseSmartContractAccount<
 	TTransport extends SupportedTransports = Transport,
-> implements ISmartContractAccount
-{
+> implements ISmartContractAccount {
 	protected factoryAddress: Address;
 	protected deploymentState: DeploymentState = DeploymentState.UNDEFINED;
 	protected accountAddress?: Address;
@@ -104,35 +103,35 @@ export abstract class BaseSmartContractAccount<
 			typeof params.rpcClient === "string"
 				? params.rpcClient
 				: params.rpcClient.transport.type === "http"
-				? (
+					? (
 						params.rpcClient.transport as ReturnType<HttpTransport>["config"] &
-							ReturnType<HttpTransport>["value"]
-				  ).url || params.chain.rpcUrls.default.http[0]
-				: undefined;
+						ReturnType<HttpTransport>["value"]
+					).url || params.chain.rpcUrls.default.http[0]
+					: undefined;
 
 		const fetchOptions =
 			typeof params.rpcClient === "string"
 				? undefined
 				: params.rpcClient.transport.type === "http"
-				? (
+					? (
 						params.rpcClient.transport as ReturnType<HttpTransport>["config"] &
-							ReturnType<HttpTransport>["value"]
-				  ).fetchOptions
-				: undefined;
+						ReturnType<HttpTransport>["value"]
+					).fetchOptions
+					: undefined;
 
 		this.rpcProvider = rpcUrl
 			? createPublicErc4337Client({
-					chain: params.chain,
-					rpcUrl,
-					fetchOptions: {
-						...fetchOptions,
-						headers: {
-							...fetchOptions?.headers,
-							"Alchemy-Aa-Sdk-Signer": params.owner?.signerType,
-							"Alchemy-Aa-Sdk-Factory-Address": params.factoryAddress,
-						},
+				chain: params.chain,
+				rpcUrl,
+				fetchOptions: {
+					...fetchOptions,
+					headers: {
+						...fetchOptions?.headers,
+						"Alchemy-Aa-Sdk-Signer": params.owner?.signerType,
+						"Alchemy-Aa-Sdk-Factory-Address": params.factoryAddress,
 					},
-			  })
+				},
+			})
 			: (params.rpcClient as PublicErc4337Client<TTransport>);
 
 		this.accountAddress = params.accountAddress;

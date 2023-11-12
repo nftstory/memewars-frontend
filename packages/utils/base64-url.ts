@@ -4,7 +4,7 @@ import type { Base64URLString, Base64String } from "webauthn-zod";
 
 export type AsciiString = string & { __brand: "AsciiString" };
 
-export function base64UrlStringtoBuffer(
+export function base64UrlStringToBuffer(
 	base64urlString: Base64URLString,
 ): Uint8Array {
 	return new Uint8Array(base64.toArrayBuffer(base64urlString, true));
@@ -28,7 +28,7 @@ export function base64urlStringToBase64(
 	base64urlString: Base64URLString,
 ): Base64String {
 	return base64.fromArrayBuffer(
-		base64UrlStringtoBuffer(base64urlString),
+		base64UrlStringToBuffer(base64urlString),
 	) as Base64String;
 }
 

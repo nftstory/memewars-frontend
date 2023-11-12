@@ -29,13 +29,12 @@ export const getAlchemyProvider = ({
 		chain,
 		entryPointAddress: entryPoint,
 	}).connect(
-		(rpcClient) =>
-			new LightSmartContractAccount({
-				entryPointAddress: entryPoint,
-				chain: rpcClient.chain,
-				owner: signer,
-				factoryAddress: getDefaultLightAccountFactoryAddress(rpcClient.chain),
-				rpcClient,
-			}),
+		(rpcClient) => new LightSmartContractAccount({
+			entryPointAddress: entryPoint,
+			chain: rpcClient.chain,
+			owner: signer,
+			factoryAddress: getDefaultLightAccountFactoryAddress(rpcClient.chain),
+			rpcClient,
+		})
 	);
 };

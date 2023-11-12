@@ -144,9 +144,7 @@ export const authOptions = {
 						const { payload } = await jose.jwtVerify(
 							challengeJwt,
 							encodedSecret,
-							{
-								issuer: NEXTAUTH_URL,
-							},
+							{ issuer: NEXTAUTH_URL },
 						);
 
 						const expectedChallenge = payload.challenge as string;
@@ -197,9 +195,7 @@ export const authOptions = {
 						await db.transaction(async (tx) => {
 							const userResult = await tx
 								.insert(users)
-								.values({
-									username: credentials.username,
-								})
+								.values({ username: credentials.username })
 								.returning();
 
 							user = userResult[0] || null;
@@ -209,6 +205,7 @@ export const authOptions = {
 							await tx
 								.insert(authenticators)
 								.values({ ...authenticator, userId: user.id });
+
 							await tx.insert(accounts).values({
 								providerAccountId: user.id,
 								userId: user.id,
@@ -229,24 +226,6 @@ export const authOptions = {
 	callbacks: {
 		async signIn({ user, account, credentials }) {
 			console.log("signIn", { user, account, credentials });
-			// // - only authorization credentials from a passkey will contain `signature`
-			// if (!!credentials && !('signature' in credentials)) {
-			//     const { username, credentialID: credentialId } =
-			//         credentials as unknown as RNPasskeyCredentials
-
-			//     const supabaseUser = await prisma.user.create({
-			//         data: {
-			//             // rome-ignore lint/style/noNonNullAssertion: using credential provider `account` should be defined
-			//             accounts: { create: { ...account! } },
-			//             credential: { create: { credentialPublicKey: user.base64PublicKey, credentialId } },
-			//             address: user.address,
-			//             username,
-			//             publicKey: `0x${[user.x, user.y].join('').replaceAll('0x', '')}`,
-			//         },
-			//     })
-
-			//     console.log('created supabase user', { supabaseUser })
-			// }
 
 			return true;
 		},

@@ -17,16 +17,18 @@ import { Controller } from "react-hook-form";
 import { useSignUpForm } from "./auth.signup.hook";
 import { useRouter } from "@memewar/app/hooks/use-router";
 import { useSession } from "@memewar/app/hooks/use-session";
+import { useAccount } from "wagmi";
 
 export default function SignUp() {
 	const { signUp, ...methods } = useSignUpForm();
 	const router = useRouter();
 	const { data: session } = useSession();
+	const { address } = useAccount();
 
 	useEffect(() => {
-		console.log("session", session);
-		if (session) router.push("/");
-	}, [session, router]);
+		console.log("effect session - ", session);
+		if (session || address) router.push("/");
+	}, [session, router, address]);
 
 	return (
 		<YStack
