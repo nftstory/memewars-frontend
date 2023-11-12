@@ -56,7 +56,17 @@ export const useSignUpForm = () => {
 				);
 				const provider = getAlchemyProvider({ signer, chain });
 				connect(
-					{ connector: passkeyConnector({ signer, chain, provider }) },
+					{
+						connector: (parameters) => {
+							const connectorFn = passkeyConnector({ signer, chain, provider });
+							try {
+								return connectorFn(parameters);
+							} catch (e) {
+								console.error("connectorFn error", e);
+								throw e;
+							}
+						},
+					},
 					{
 						onSuccess: (...args) =>
 							console.log("connected passkey account", { ...args }),
@@ -69,26 +79,6 @@ export const useSignUpForm = () => {
 			} catch (e) {
 				toast((e as Error).message);
 			}
-
-			// const result = await passkey.create({
-			// 	challenge,
-			// 	csrfToken,
-			// 	user: {
-			// 		id: asciiToBase64UrlString(username as AsciiString),
-			// 		name: username,
-			// 		displayName: username,
-			// 	},
-			// 	extensions: { largeBlob: { support: "required" } },
-			// });
-
-			// console.log("result", result);
-
-			// // TODO: What do we want to do if the users device doesn't support largeBlob?
-			// // ! for now we will block the user from using the application if this is the case
-			// if (!result?.clientExtensionResults.largeBlob?.supported)
-			// 	throw new Error("Device not supported");
-
-			// return result;
 		},
 		[connect, toast],
 	);

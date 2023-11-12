@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { headers } from "next/headers";
 import { db, users } from "@db/index";
 import { bufferToBase64UrlString } from "@utils/base64-url";
-import type { Base64URLString } from "@forum/passkeys";
+import type { Base64URLString } from "webauthn-zod";
 import { eq } from "drizzle-orm";
 import { type NextRequest } from "next/server";
 import * as jose from "jose";
@@ -15,7 +15,6 @@ interface RouteHandlerContext {
 }
 
 export async function POST(req: NextRequest, context: RouteHandlerContext) {
-	console.log("POST", context, req);
 	const { params } = context;
 	const headersStore = headers();
 
@@ -27,16 +26,8 @@ export async function POST(req: NextRequest, context: RouteHandlerContext) {
 		const session = await getServerSession();
 
 		if (session) {
-			const rawChallenge = crypto.randomBytes(32);
-			const challenge = bufferToBase64UrlString(rawChallenge);
-
-			const updatedUser = await db
-				.update(users)
-				.set({ currentChallenge: challenge })
-				// @ts-expect-error: id should exist on session?
-				.where(eq(users.id, session.user.id))
-				.returning();
-			if (!updatedUser) throw new Error("Failed to update user");
+			// @ts-expect-error: our next auth session override isn't working?
+			await storeChallenge({ userId: session.user.id })
 		}
 	}
 
@@ -56,33 +47,45 @@ export async function GET(req: NextRequest, context: RouteHandlerContext) {
 		return await NextAuth(authOptions)(req, context);
 
 	// - get request to `csrf` is a potential new user
-	// - since they are new we cannot have a `currentChallenge` we pass it in a secure cookie instead
+	// - if they are new we cannot have a `currentChallenge` we pass it in a secure cookie instead
 
-	const cookieStore = cookies();
-	const headersStore = headers();
+	// - if it is a user who has not lost their session then we check if a credentialId was passed 
+	// - In which case we attach the challenge to the user as we would in the POST endpoint
 
-	const hasXChallenge = !!headersStore.get("x-challenge");
 	let challenge: Base64URLString | undefined;
+	const credentialId = req.nextUrl.searchParams.get('cid')
 
-	if (hasXChallenge) {
-		const rawChallenge = crypto.randomBytes(32);
-		challenge = bufferToBase64UrlString(rawChallenge);
+	if (credentialId) {
+		challenge = await storeChallenge({ credentialId })
+	} else {
+		const cookieStore = cookies();
+		const headersStore = headers();
 
-		const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET!);
+		const hasXChallenge = !!headersStore.get("x-challenge");
 
-		const challengeJwt = await new jose.SignJWT({ challenge })
-			.setProtectedHeader({ alg: "HS256" })
-			.setIssuedAt()
-			.setIssuer(process.env.NEXTAUTH_URL!)
-			.setExpirationTime("1h")
-			.sign(secret);
+		if (hasXChallenge) {
+			const rawChallenge = crypto.randomBytes(32);
+			challenge = bufferToBase64UrlString(rawChallenge);
 
-		cookieStore.set({
-			name: "next-auth.challenge",
-			value: challengeJwt,
-			domain: process.env.NEXTAUTH_URL!,
-			maxAge: 60 * 60, // - 1 hour,
-		});
+			// biome-ignore lint/style/noNonNullAssertion: <explanation>
+			const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET!);
+
+			const challengeJwt = await new jose.SignJWT({ challenge })
+				.setProtectedHeader({ alg: "HS256" })
+				.setIssuedAt()
+				// biome-ignore lint/style/noNonNullAssertion: <explanation>
+				.setIssuer(process.env.NEXTAUTH_URL!)
+				.setExpirationTime("1h")
+				.sign(secret);
+
+			cookieStore.set({
+				name: "next-auth.challenge",
+				value: challengeJwt,
+				// biome-ignore lint/style/noNonNullAssertion: <explanation>
+				domain: process.env.NEXTAUTH_URL!,
+				maxAge: 60 * 60, // - 1 hour,
+			});
+		}
 	}
 
 	const response = await NextAuth(authOptions)(req, context);
@@ -92,4 +95,38 @@ export async function GET(req: NextRequest, context: RouteHandlerContext) {
 	}
 
 	return response;
+}
+
+async function storeChallenge(args: { userId: string } | { credentialId: string }) {
+	const rawChallenge = crypto.randomBytes(32);
+	const challenge = bufferToBase64UrlString(rawChallenge);
+
+	if ('userId' in args) {
+		const updatedUser = await db
+			.update(users)
+			.set({ currentChallenge: challenge })
+			.where(eq(users.id, args.userId))
+			.returning();
+		if (!updatedUser) throw new Error("Failed to update user");
+
+		return challenge
+	}
+
+	const { credentialId } = args
+
+	const currentUser = await db.query.users.findFirst({
+		with: {
+			authenticators: {
+				where(fields, operators) {
+					return operators.sql`${fields.credentialID} = ${credentialId}`
+				}
+			}
+		},
+	})
+
+
+	console.log('currentUser', currentUser)
+
+	return challenge
+
 }

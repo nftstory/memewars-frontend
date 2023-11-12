@@ -66,25 +66,44 @@ export class Passkey extends LargeBlobPasskey {
 	async generateAuthenticationOptions(
 		options: Omit<PublicKeyCredentialRequestOptionsJSON, "challenge">,
 	): Promise<PublicKeyCredentialRequestOptionsJSON> {
-		console.log('generateAuthenticationOptions', options)
 
-		let challenge = localStorage.getItem("challenge") as
-			| Base64URLString
-			| undefined;
+		const generated = await generateChallenge();
+		const challenge = generated.challenge
+		localStorage.setItem("challenge", generated.challenge);
 
-		if (!challenge) {
-			const generated = await generateChallenge();
-			challenge = generated.challenge
-			localStorage.setItem("challenge", generated.challenge);
-		}
-
+		console.log('generateAuthenticationOptions', { generated })
 		return { ...options, challenge };
 	}
 
 	async verifyAuthentication(
 		options: VerifyAuthenticationResponseOpts,
 	): Promise<VerifiedAuthenticationResponse> {
-		return await webauthnServerActions.verifyAuthentication(options);
+		const csrfToken = localStorage.getItem("csrfToken");
+
+		console.log('verifyAuthentication', { options })
+		const res = await api
+			.url("/auth/callback/credentials/")
+			.post({ csrfToken, ...options.response })
+			.res();
+
+		console.log("verifyAuth res - ", res)
+		if (!res || !res.ok) {
+			console.log("failed to post credentials", res);
+			throw new Error("Failed to create credentials");
+		}
+
+		return {
+			verified: true, authenticationInfo: {
+				// @ts-ignore
+				credentialID: options.response.id,
+				newCounter: 0,
+				userVerified: true,
+				credentialDeviceType: "singleDevice",
+				credentialBackedUp: false,
+				origin: "",
+				rpID: ''
+			}
+		}
 	}
 
 	async verifyRegistration(

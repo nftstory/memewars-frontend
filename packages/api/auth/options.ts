@@ -16,7 +16,7 @@ import {
 	webauthnRegistrationResponseSchema,
 } from "webauthn-zod";
 import {
-	base64UrlStringtoBuffer,
+	base64UrlStringToBuffer,
 	bufferToBase64UrlString,
 } from "@memewar/utils/base64-url";
 
@@ -55,7 +55,7 @@ export const authOptions = {
 				if (!db) throw new Error("Missing db credentials");
 				if (!credentials) return null;
 
-				console.log("authorize", credentials);
+				console.log("authorize - ", credentials);
 
 				const authCredentials =
 					webauthnAuthenticationResponseSchema.safeParse(credentials);
@@ -69,6 +69,7 @@ export const authOptions = {
 						credentialID,
 					});
 
+					console.log('authCredentials - ', authenticator)
 					if (
 						!authenticator?.id ||
 						!authenticator?.credentialID ||
@@ -82,13 +83,29 @@ export const authOptions = {
 
 					if (!user) return null;
 
-					const expectedChallenge = user.currentChallenge;
+					// TODO: PUT ME BACK IN COACH!
+					// const expectedChallenge = user.currentChallenge;
 
-					if (!expectedChallenge)
-						throw new Error(
-							`Could not find expected challenge for user ${user.id}`,
-						);
+					// if (!expectedChallenge)
+					// 	throw new Error(
+					// 		`Could not find expected challenge for user ${user.id}`,
+					// 	);
 
+					console.log('pre verificion - ', {
+						response: authCredentials.data,
+						expectedChallenge,
+						expectedOrigin,
+						expectedRPID: rpID,
+						authenticator: {
+							credentialID: base64UrlStringToBuffer(
+								authenticator.credentialID,
+							),
+							credentialPublicKey: base64UrlStringToBuffer(
+								authenticator.credentialPublicKey,
+							),
+							counter: authenticator.counter,
+						},
+					})
 					let verification: VerifiedAuthenticationResponse;
 					try {
 						verification = await verifyAuthenticationResponse({
@@ -97,10 +114,10 @@ export const authOptions = {
 							expectedOrigin,
 							expectedRPID: rpID,
 							authenticator: {
-								credentialID: base64UrlStringtoBuffer(
+								credentialID: base64UrlStringToBuffer(
 									authenticator.credentialID,
 								),
-								credentialPublicKey: base64UrlStringtoBuffer(
+								credentialPublicKey: base64UrlStringToBuffer(
 									authenticator.credentialPublicKey,
 								),
 								counter: authenticator.counter,

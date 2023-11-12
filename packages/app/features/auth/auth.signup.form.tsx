@@ -25,9 +25,11 @@ export default function SignUp() {
 	const { data: session } = useSession();
 	const { address } = useAccount();
 
+	console.log("address", address);
+
 	useEffect(() => {
 		console.log("effect session - ", session);
-		if (session || address) router.push("/");
+		if (session || !!address) router.push("/");
 	}, [session, router, address]);
 
 	return (
