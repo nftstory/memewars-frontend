@@ -3,19 +3,20 @@ import { defaultChainId, getChainAndTransport } from "@memewar/app/lib/wagmi";
 import { getAlchemyProvider } from "@memewar/app/lib/alchemy";
 import { passkeyConnector } from "@forum/passkeys/packages/passkeys";
 import { WalletClientSigner } from "@alchemy/aa-core";
+import type { SetOptional } from "type-fest";
 
 const LARGEBLOB_WALLET_SIGNER_TYPE = "largeBlob-passkey-signer";
 
-export const getPasskeyConnector = async ({
-	username,
-	chainId = defaultChainId,
-}: { username: string; chainId?: number }) => {
+export const getPasskeyConnector = async (
+	params: SetOptional<Parameters<typeof getPasskeyWalletClient>[0], "chainId">,
+) => {
+	const { chainId = defaultChainId } = params;
 	const { chain } = getChainAndTransport(chainId);
 
 	if (!chain?.id) throw new Error("Chain not found");
 
 	const walletClient = await getPasskeyWalletClient({
-		username,
+		...params,
 		chainId: chain.id,
 	});
 

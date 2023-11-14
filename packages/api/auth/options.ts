@@ -69,7 +69,7 @@ export const authOptions = {
 						credentialID,
 					});
 
-					console.log('authCredentials - ', authenticator)
+					console.log("authCredentials - ", authenticator);
 					if (
 						!authenticator?.id ||
 						!authenticator?.credentialID ||
@@ -83,29 +83,32 @@ export const authOptions = {
 
 					if (!user) return null;
 
+					console.log("user", user);
+
 					// TODO: PUT ME BACK IN COACH!
 					// const expectedChallenge = user.currentChallenge;
+					const expectedChallenge = (await getChallengeFromCookie(
+						response.headers?.cookie,
+					)) as string;
 
-					// if (!expectedChallenge)
-					// 	throw new Error(
-					// 		`Could not find expected challenge for user ${user.id}`,
-					// 	);
+					if (!expectedChallenge)
+						throw new Error(
+							`Could not find expected challenge for user ${user.id}`,
+						);
 
-					console.log('pre verificion - ', {
+					console.log("pre verificion - ", {
 						response: authCredentials.data,
 						expectedChallenge,
 						expectedOrigin,
 						expectedRPID: rpID,
 						authenticator: {
-							credentialID: base64UrlStringToBuffer(
-								authenticator.credentialID,
-							),
+							credentialID: base64UrlStringToBuffer(authenticator.credentialID),
 							credentialPublicKey: base64UrlStringToBuffer(
 								authenticator.credentialPublicKey,
 							),
 							counter: authenticator.counter,
 						},
-					})
+					});
 					let verification: VerifiedAuthenticationResponse;
 					try {
 						verification = await verifyAuthenticationResponse({
@@ -151,20 +154,9 @@ export const authOptions = {
 					if (registrationCredentials.success) {
 						// - at this point we haven't give the user an account but we have given them a challenge
 						// - so we check that the user has returned a challenge matching that on their init cookie
-						const cookies = Object.fromEntries(
-							response.headers?.cookie
-								?.split("; ")
-								.map((c) => c.split("=") as [string, string]) ?? [],
-						);
-						const challengeJwt = cookies?.["next-auth.challenge"];
-
-						const { payload } = await jose.jwtVerify(
-							challengeJwt,
-							encodedSecret,
-							{ issuer: NEXTAUTH_URL },
-						);
-
-						const expectedChallenge = payload.challenge as string;
+						const expectedChallenge = (await getChallengeFromCookie(
+							response.headers?.cookie,
+						)) as string;
 
 						if (!expectedChallenge)
 							throw new Error("Could not find expected challenge");
@@ -278,4 +270,17 @@ export const authOptions = {
 			return session;
 		},
 	},
+};
+
+const getChallengeFromCookie = async (cookie) => {
+	const cookies = Object.fromEntries(
+		cookie?.split("; ").map((c) => c.split("=") as [string, string]) ?? [],
+	);
+	const challengeJwt = cookies?.["next-auth.challenge"];
+
+	const { payload } = await jose.jwtVerify(challengeJwt, encodedSecret, {
+		issuer: NEXTAUTH_URL,
+	});
+
+	return payload.challenge;
 };

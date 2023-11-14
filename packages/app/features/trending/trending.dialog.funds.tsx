@@ -10,14 +10,31 @@ import {
 	Label,
 	Paragraph,
 	Sheet,
+	// @ts-ignore
 	tokens,
 	TooltipSimple,
 	Unspaced,
 	XStack,
 } from "@memewar/design-system";
+import { useAccount, useBalance } from "wagmi";
 
 export const TrendingFundsDialog = () => {
 	const [open, setOpen] = useState(true);
+
+	const { address } = useAccount();
+	const { data: balance } = useBalance({
+		address,
+		unit: "ether",
+		query: {
+			gcTime: 5 * 1000,
+			staleTime: 5 * 1000,
+		},
+	});
+
+	const ethValue =
+		balance?.value && balance?.decimals
+			? balance.value / BigInt(10 ** balance.decimals)
+			: undefined;
 
 	return (
 		<Dialog
@@ -76,15 +93,17 @@ export const TrendingFundsDialog = () => {
 						alignItems="center"
 					>
 						<Paragraph>
-							0xd8dA6BF26964aF9D7eE
+							{address?.slice(0, 21)}
+							{/* 0xd8dA6BF26964aF9D7eE */}
 							{"\n"}
-							d9e03E53415D37aA96045
+							{/* d9e03E53415D37aA96045 */}
+							{address?.slice(21)}
 						</Paragraph>
 						<Button size="$1" backgroundColor={"transparent"} icon={Copy} />
 					</XStack>
 
 					<Paragraph color={tokens.color.textSecondary} fontSize={"$5"}>
-						Current Balance 0.00 ETH
+						Current Balance {ethValue ?? "0.00"} ETH
 					</Paragraph>
 
 					<Unspaced>

@@ -9,6 +9,7 @@ import { useConnect } from "wagmi";
 import { useToastController } from "@memewar/design-system";
 import { generateChallenge } from "@memewar/utils/generate-challenge";
 import { getPasskeyConnector } from "@memewar/utils/get-passkey-connector";
+import { connectPasskey } from "../../hooks/use-auto-connect";
 
 export const useSignUpForm = () => {
 	const { connect } = useConnect();
@@ -19,29 +20,10 @@ export const useSignUpForm = () => {
 	const signUp = useCallback<Parameters<typeof methods["handleSubmit"]>[0]>(
 		async ({ username }) => {
 			console.log("username", username);
-			const challenge = localStorage.getItem("challenge") as
-				| Base64URLString
-				| undefined;
-			const csrfToken = localStorage.getItem("csrfToken");
-
-			if (!challenge || !csrfToken)
-				throw new Error("Could not find challenge or token");
-
 			console.log("hostname", getHostname());
 			console.log("baseUrl", getBaseUrl());
-
 			try {
-				connect(
-					{ connector: await getPasskeyConnector({ username }) },
-					{
-						onSuccess: (...args) =>
-							console.log("connected passkey account", { ...args }),
-						onError: (...args) => {
-							console.log("failed to connect passkey account", { ...args });
-							throw args[0];
-						},
-					},
-				);
+				await connectPasskey({ connect, username });
 			} catch (e) {
 				toast((e as Error).message);
 			}

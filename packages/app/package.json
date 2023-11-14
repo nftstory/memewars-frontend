@@ -35,5 +35,8 @@
     "webauthn-zod": "^0.1.2",
     "wretch": "^2.7.0",
     "zustand": "^4.4.3"
+  },
+  "devDependencies": {
+    "type-fest": "^4.7.1"
   }
 }
