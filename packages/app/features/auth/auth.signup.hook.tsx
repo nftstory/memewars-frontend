@@ -6,13 +6,9 @@ import { getHostname } from "@memewar/utils/get-hostname";
 import { useCallback, useEffect } from "react";
 import { usernameFormSchema } from "./auth.signup.form.schema";
 import { useConnect } from "wagmi";
-import { getPasskeyWalletClient } from "@memewar/app/lib/large-blob-account";
 import { useToastController } from "@memewar/design-system";
-import { defaultChainId, getChainAndTransport } from "@memewar/app/lib/wagmi";
-import { getAlchemyProvider } from "@memewar/app/lib/alchemy";
-import { passkeyConnector } from "@forum/passkeys/packages/passkeys";
-import { WalletClientSigner } from "@alchemy/aa-core";
 import { generateChallenge } from "@memewar/utils/generate-challenge";
+import { getPasskeyConnector } from "@memewar/utils/get-passkey-connector";
 
 export const useSignUpForm = () => {
 	const { connect } = useConnect();
@@ -35,38 +31,8 @@ export const useSignUpForm = () => {
 			console.log("baseUrl", getBaseUrl());
 
 			try {
-				const { chain } = getChainAndTransport(defaultChainId);
-
-				const walletClient = await getPasskeyWalletClient({
-					username,
-					chainId: chain.id,
-				});
-				console.log("after walletClient", await walletClient.getAddresses());
-
-				/** A largeBlob passkey *CAN* more than more signer that will sign in a single verification
-				 * is this something we want to add?
-				 *
-				 * Accounts could have both EOA & R1 signers that (under certain conditions?) could both be required
-				 * with no difference to UX.
-				 *
-				 */
-				const signer = new WalletClientSigner(
-					walletClient,
-					"largeBlob-passkey-signer",
-				);
-				const provider = getAlchemyProvider({ signer, chain });
 				connect(
-					{
-						connector: (parameters) => {
-							const connectorFn = passkeyConnector({ signer, chain, provider });
-							try {
-								return connectorFn(parameters);
-							} catch (e) {
-								console.error("connectorFn error", e);
-								throw e;
-							}
-						},
-					},
+					{ connector: await getPasskeyConnector({ username }) },
 					{
 						onSuccess: (...args) =>
 							console.log("connected passkey account", { ...args }),

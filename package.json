@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "native": "cd apps/mobile && bun run start",
-    "web": "bun run build && cd apps/web && bun run next",
+    "web": "cd apps/web && bun run dev",
     "web:extract": "DISABLE_EXTRACTION=false bun run workspace @memewar/web dev",
     "web:prod": "bun run workspace @memewar/web build",
     "web:prod:serve": "bun run workspace @memewar/web serve",

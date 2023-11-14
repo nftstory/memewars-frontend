@@ -20,9 +20,8 @@ export async function getPasskeyWalletClient({
 	const { chain, transport } = getChainAndTransport(chainId);
 
 	const account = await LargeBlobPasskeyAccount.init({ passkey, ...rest });
-	const walletName = `${
-		"username" in rest ? rest.username : rest.credentialId
-	} Wallet Client`;
+	const walletName = `${"username" in rest ? rest.username : rest.credentialId
+		} Wallet Client`;
 
 	return createWalletClient({
 		// @ts-expect-error: still need to implement signMessage & signTypedData
@@ -30,7 +29,7 @@ export async function getPasskeyWalletClient({
 		chain,
 		// @ts-ignore
 		transport: (chain) => {
-			const tport = transport(chain);
+			const tport = transport?.(chain);
 			return {
 				...tport,
 				request: async ({
@@ -41,7 +40,7 @@ export async function getPasskeyWalletClient({
 					if (method === "eth_accounts") {
 						return [account.address];
 					}
-					return await tport.request({ method, params });
+					return await tport?.request({ method, params });
 				},
 			} as unknown as Transport;
 		},

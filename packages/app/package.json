@@ -29,6 +29,7 @@
     "react-native-passkeys": "^0.1.6",
     "remeda": "^1.27.0",
     "solito": "^4.0.1",
+    "superjson": "^2.2.1",
     "viem": "beta",
     "wagmi": "beta",
     "webauthn-zod": "^0.1.2",

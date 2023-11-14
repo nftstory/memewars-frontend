@@ -472,7 +472,7 @@ var require_get_img_props = __commonJS({
           - Change the "src" property to a static import with one of the supported file types: ` + VALID_BLUR_EXT.join(",") + ' (animated images not supported)\n          - Remove the "placeholder" property, effectively no blur effect\n        Read more: https://nextjs.org/docs/messages/placeholder-blur-data-url');
         }
         if ("ref" in rest) {
-          (0, _warnonce.warnOnce)('Image with src "' + src + '" is using unsupported "ref" property. Consider using the "onLoadingComplete" property instead.');
+          (0, _warnonce.warnOnce)('Image with src "' + src + '" is using unsupported "ref" property. Consider using the "onLoad" property instead.');
         }
         if (!unoptimized && !isDefaultLoader) {
           const urlStr = loader({
@@ -489,6 +489,9 @@ var require_get_img_props = __commonJS({
           if (urlStr === src || url && url.pathname === src && !url.search) {
             (0, _warnonce.warnOnce)('Image with src "' + src + '" has a "loader" property that does not implement width. Please implement it or use the "unoptimized" property instead.\nRead more: https://nextjs.org/docs/messages/next-image-missing-loader-width');
           }
+        }
+        if (onLoadingComplete) {
+          (0, _warnonce.warnOnce)('Image with src "' + src + '" is using deprecated "onLoadingComplete" property. Please use the "onLoad" property instead.');
         }
         for (const [legacyKey, legacyValue] of Object.entries({
           layout,
@@ -3566,7 +3569,7 @@ var require_image_component = __commonJS({
     }
     __name(handleLoading, "handleLoading");
     function getDynamicProps(fetchPriority) {
-      const [majorStr, minorStr] = _react.version.split(".");
+      const [majorStr, minorStr] = _react.version.split(".", 2);
       const major = parseInt(majorStr, 10);
       const minor = parseInt(minorStr, 10);
       if (major > 18 || major === 18 && minor >= 3) {
